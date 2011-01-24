@@ -26,38 +26,40 @@
     <groupId>org.meaningfulweb</groupId>
     <artifactId>meaningfulweb-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <relativePath>meaningfulweb-parent/pom.xml</relativePath>
+    <relativePath>../meaningfulweb-parent/pom.xml</relativePath>
   </parent>
 
-  <artifactId>meaningfulweb</artifactId>
-  <packaging>pom</packaging>
-  <name>Meaningful Web</name>
-  <url>http://www.meaningfulweb.org</url>
+  <artifactId>meaningfulweb-app</artifactId>
+  <packaging>war</packaging>
+  <name>meaningfulweb-app</name>
 
-  <scm>
-    <connection>
-      scm:git://github.com/javasoze/meaningfulweb.git
-    </connection>
-    <developerConnection>
-      scm:git@github.com:javasoze/meaningfulweb.git
-    </developerConnection>
-    <url>https://github.com/javasoze/meaningfulweb</url>
-  </scm>
-
-  <modules>
-    <module>meaningfulweb-parent</module>
-    <module>meaningfulweb-core</module>
-    <module>meaningfulweb-app</module>
-  </modules>
-
+  <!-- Set the compiler to java6 -->
   <build>
     <plugins>
-      <plugin>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <configuration>
-          <skip>true</skip> <!-- No need to deploy the reactor -->
-        </configuration>
-      </plugin>
+        <plugin>
+		  <groupId>org.apache.maven.plugins</groupId>
+		  <artifactId>maven-war-plugin</artifactId>
+		  <version>2.1.1</version>
+		  <configuration>
+			 <encoding>UTF-8</encoding>
+		  </configuration>
+		</plugin>
     </plugins>
   </build>
+  
+
+  <dependencies>
+    <dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>meaningfulweb-core</artifactId>
+	  <version>${project.version}</version>
+	</dependency>
+	<dependency>
+	  <groupId>javax.servlet</groupId>
+	  <artifactId>servlet-api</artifactId>
+	  <version>2.5</version>
+	  <scope>compile</scope>
+	</dependency>
+  </dependencies>
+
 </project>
