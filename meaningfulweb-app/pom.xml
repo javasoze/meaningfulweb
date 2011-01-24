@@ -33,7 +33,6 @@
   <packaging>war</packaging>
   <name>meaningfulweb-app</name>
 
-  <!-- Set the compiler to java6 -->
   <build>
     <plugins>
         <plugin>
@@ -43,6 +42,10 @@
 		  <configuration>
 			 <encoding>UTF-8</encoding>
 		  </configuration>
+		</plugin>
+		<plugin>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>maven-jetty-plugin</artifactId>
 		</plugin>
     </plugins>
   </build>
@@ -54,6 +57,11 @@
 	  <artifactId>meaningfulweb-core</artifactId>
 	  <version>${project.version}</version>
 	</dependency>
+	<dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20090211</version>
+    </dependency>
 	<dependency>
 	  <groupId>javax.servlet</groupId>
 	  <artifactId>servlet-api</artifactId>

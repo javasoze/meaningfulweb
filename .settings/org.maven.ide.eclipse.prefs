@@ -1,7 +1,8 @@
-#Sun Jan 23 17:03:46 PST 2011
-activeProfiles=
+#Mon Jan 24 13:40:55 PST 2011
+activeProfiles=pom.xml,meaningfulweb-core/pom.xml
 eclipse.preferences.version=1
 fullBuildGoals=process-test-resources
+includeModules=false
 resolveWorkspaceProjects=true
 resourceFilterGoals=process-resources resources\:testResources
 skipCompilerPlugin=true
