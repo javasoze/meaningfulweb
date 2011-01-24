@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.meaningfulweb</groupId>
+  <artifactId>meaningfulweb</artifactId>
+  <packaging>jar</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>og4j</name>
+  <description>web content extractor</description>
+  <url>https://github.com/javasoze/meaningfulweb/</url>
+  <licenses>
+        <license>
+                <name>Apache License, Version 2.0</name>
+                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+                <distribution>repo</distribution>
+        </license>
+  </licenses>
+
+  <!-- Set the compiler to java6 -->
+  <build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>2.1</version>
+            <configuration>
+                <source>1.6</source>
+                <target>1.6</target>
+            </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.5</version>
+          <configuration>
+          </configuration>
+       </plugin>
+
+    </plugins>
+  </build>
+  
+
+  <dependencies>
+    <dependency>
+	    <groupId>proj.og4j</groupId>
+	    <artifactId>og4j</artifactId>
+	    <version>0.0.1-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.tika</groupId>
+	    <artifactId>tika-core</artifactId>
+	    <version>0.9-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.tika</groupId>
+	    <artifactId>tika-parsers</artifactId>
+	    <version>0.9-SNAPSHOT</version>
+	</dependency>
+    <dependency>
+	    <groupId>commons-httpclient</groupId>
+	    <artifactId>commons-httpclient</artifactId>
+	    <version>3.1</version>
+	</dependency>
+    <dependency>
+	    <groupId>net.htmlparser.jericho</groupId>
+	    <artifactId>jericho-html</artifactId>
+	    <version>3.1</version>
+	</dependency>
+	<dependency>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>
+      <version>1.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.5.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>1.5.6</version>
+    </dependency>
+	<dependency>
+	   <groupId>junit</groupId>
+	   <artifactId>junit</artifactId>
+	   <version>4.5</version>
+	   <scope>test</scope>
+	</dependency>
+  </dependencies>
+
+</project>
