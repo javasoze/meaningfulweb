@@ -30,10 +30,8 @@ public class DetectorBuilder {
 					throws IOException {
 				MediaType type = typeDetector.detect(input, metadata);
 				if (MediaType.OCTET_STREAM == type){
-					System.out.println("fail over to default detector");
 					type = defaultDetector.detect(input, metadata);
 				}
-				System.out.println("returning type: "+type);
 				return type;
 			}
 			

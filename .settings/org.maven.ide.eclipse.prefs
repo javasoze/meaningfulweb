@@ -1,5 +1,5 @@
-#Mon Jan 24 13:40:55 PST 2011
-activeProfiles=pom.xml,meaningfulweb-core/pom.xml
+#Tue Jan 25 00:36:02 PST 2011
+activeProfiles=pom.xml,meaningfulweb-parent/pom.xml,meaningfulweb-core/pom.xml,meaningfulweb-app.xml
 eclipse.preferences.version=1
 fullBuildGoals=process-test-resources
 includeModules=false
