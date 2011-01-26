@@ -1,5 +1,18 @@
 <html>
-  <head><title>Meaningful Web</title></head>
+  <head><title>Meaningful Web</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<script src="http://code.jquery.com/jquery-1.4.4.js"></script>
+	<script src="meaningfulwebapp.js"></script>
+  </head>
   <body>
+    <p align="center">
+	  <h1>Meaningful Web</h1>
+    </p>
+    <p align="center">
+	  Enter url: <input id="url" type="text" />
+	  <input type="button" id="doextract" value="extract content" onclick="doextract()"/><br/>
+	</p>
+	<div id="extractionresult">
+	</div>
   </body>
 </html>
