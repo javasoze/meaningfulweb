@@ -33,6 +33,11 @@
   <packaging>jar</packaging>
   <name>meaningfulweb-core</name>
   <description>web content extractor</description>
+
+  <properties>
+    <poi.version>3.7</poi.version>
+  </properties>
+
   
   <!-- Set the compiler to java6 -->
   <build>
@@ -60,11 +65,57 @@
   
 
   <dependencies>
+	<!-- these would be removed after tika-parser is pulled from mvn -->
 	<dependency>
 		<groupId>de.l3s.boilerpipe</groupId>
 		<artifactId>boilerpipe</artifactId>
 		<version>1.1.0</version>
 	</dependency>
+	<dependency>
+	      <groupId>org.apache.pdfbox</groupId>
+	      <artifactId>pdfbox</artifactId>
+	      <version>1.3.1</version>
+	    </dependency>
+	    <!-- TIKA-370: PDFBox declares the Bouncy Castle dependencies
+	         as optional, but we prefer to have them always to avoid
+	         problems with encrypted PDFs. -->
+			<dependency>
+			      <groupId>org.bouncycastle</groupId>
+			      <artifactId>bcmail-jdk15</artifactId>
+			      <version>1.45</version>
+			    </dependency>
+	
+	<dependency>
+	      <groupId>org.bouncycastle</groupId>
+	      <artifactId>bcprov-jdk15</artifactId>
+	      <version>1.45</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.apache.poi</groupId>
+	      <artifactId>poi</artifactId>
+	      <version>${poi.version}</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.apache.poi</groupId>
+	      <artifactId>poi-scratchpad</artifactId>
+	      <version>${poi.version}</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.apache.poi</groupId>
+	      <artifactId>poi-ooxml</artifactId>
+	      <version>${poi.version}</version>
+	      <exclusions>
+	        <exclusion>
+	          <groupId>stax</groupId>
+	          <artifactId>stax-api</artifactId>
+	        </exclusion>
+	        <exclusion>
+	          <groupId>xml-apis</groupId>
+	          <artifactId>xml-apis</artifactId>
+	        </exclusion>
+	      </exclusions>
+	    </dependency>
+	
 
     <dependency>
 	    <groupId>proj.og4j</groupId>
