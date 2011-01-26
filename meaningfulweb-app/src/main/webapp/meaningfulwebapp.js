@@ -1,9 +1,14 @@
+var doExtract = function (url, callback) {
+	$.getJSON('get-meaning', {'url': url}, callback);
+};
+
+/*
 function removeAllChildren(elem){
 	if ( elem.hasChildNodes() ){
-	    while (elem.childNodes.length >= 1 )
-	    {
-	        elem.removeChild( elem.firstChild );       
-	    } 
+		while (elem.childNodes.length >= 1 )
+		{
+			elem.removeChild( elem.firstChild );	   
+		} 
 	}
 }
 
@@ -43,4 +48,4 @@ function renderResult(jsonObj){
 	
 	
 	
-}
+}*/

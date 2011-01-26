@@ -1,18 +1,69 @@
 <html>
-  <head><title>Meaningful Web</title>
+	<head><title>Meaningful Web</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<script src="http://code.jquery.com/jquery-1.4.4.js"></script>
 	<script src="meaningfulwebapp.js"></script>
-  </head>
-  <body>
-    <p align="center">
-	  <h1>Meaningful Web</h1>
-    </p>
-    <p align="center">
-	  Enter url: <input id="url" type="text" />
-	  <input type="button" id="doextract" value="extract content" onclick="doextract()"/><br/>
+	<script type="text/javascript">
+	// <![CDATA[
+	var r = null;
+	$(function() {
+		$('#doExtract').click(function(e) {
+			doExtract($('#url').val(), function (data){
+				r = data;
+				var div = $('#extractionResult').empty();
+				var table = div.append('<table></table>').find('table:last');
+				if (data['image']) {
+					var tr = table.append('<tr></tr>').find('tr:last');
+					var img = null;
+					if (data['url']) {
+						img = tr.append('<td>image</td>')
+							.append('<td><a></a></td>').find('a:last')
+							.attr('href', data['url'])
+							.append('<img />').find('img:last')
+							.attr('src', data['image'])
+					}
+					else {
+						img = tr.append('<td>Image</td>')
+							.append('<td></td>').find('td:last')
+							.append('<img />').find('img:last')
+							.attr('src', data['image'])
+					}
+					if (data['title']) {
+						img.attr('alt', data['title']);
+					}
+				}
+
+				for (key in data) {
+					if (key == 'image')
+						continue;
+
+					var tr = table.append('<tr></tr>').find('tr:last');
+					tr.append('<td></td>').find('td:last').text(key);
+					if (key == 'url') {
+						tr.append('<td></td>').find('td:last')
+						.append('<a></a>').find('a:last')
+						.attr('href', data[key])
+						.text(data[key]);
+					}
+					else {
+						tr.append('<td></td>').find('td:last').text(data[key]);
+					}
+				}
+			});
+		});
+	});
+	// ]]>
+	</script>
+	</head>
+	<body>
+		<p align="center">
+		<h1>Meaningful Web</h1>
+		</p>
+		<p align="center">
+		Enter url: <input id="url" type="text" />
+		<input type="button" id="doExtract" value="extract content" /><br/>
 	</p>
-	<div id="extractionresult">
+	<div id="extractionResult">
 	</div>
-  </body>
+	</body>
 </html>
