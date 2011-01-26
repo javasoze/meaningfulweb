@@ -8,10 +8,12 @@
 	var r = null;
 	$(function() {
 		$('#doExtract').click(function(e) {
+			var div = $('#extractionResult').empty();
+			div.append('<h3><i>Working ... </i></h3>');
 			doExtract($('#url').val(), function (data){
 				r = data;
 				var div = $('#extractionResult').empty();
-				var table = div.append('<table></table>').find('table:last');
+				var table = div.append('<table border="1"></table>').find('table:last');
 				if (data['image']) {
 					var tr = table.append('<tr></tr>').find('tr:last');
 					var img = null;
@@ -56,9 +58,7 @@
 	</script>
 	</head>
 	<body>
-		<p align="center">
-		<h1>Meaningful Web</h1>
-		</p>
+		<h1 align="center">Meaningful Web</h1>
 		<p align="center">
 		Enter url: <input id="url" type="text" />
 		<input type="button" id="doExtract" value="extract content" /><br/>
