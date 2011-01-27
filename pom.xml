@@ -47,6 +47,7 @@
   <modules>
     <module>meaningfulweb-parent</module>
     <module>meaningfulweb-core</module>
+    <module>meaningfulweb-opengraph</module>
     <module>meaningfulweb-app</module>
   </modules>
 
