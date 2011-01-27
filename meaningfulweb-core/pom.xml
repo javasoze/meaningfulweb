@@ -116,12 +116,12 @@
 	      </exclusions>
 	    </dependency>
 	
+	<dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>meaningfulweb-opengraph</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
-    <dependency>
-	    <groupId>proj.og4j</groupId>
-	    <artifactId>og4j</artifactId>
-	    <version>0.0.1-SNAPSHOT</version>
-	</dependency>
 	<dependency>
 	    <groupId>org.apache.tika</groupId>
 	    <artifactId>tika-core</artifactId>

@@ -19,7 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.meaningfulweb.api.MetaContentExtractor;
 
-import proj.og4j.OGObject;
+import org.meaningfulweb.opengraph.OGObject;
 
 public class MeaningfulWebServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;

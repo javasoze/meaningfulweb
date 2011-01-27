@@ -34,8 +34,8 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import proj.og4j.OGObject;
-import proj.og4j.OpenGraphParser;
+import org.meaningfulweb.opengraph.OGObject;
+import org.meaningfulweb.opengraph.OpenGraphParser;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.extractors.ArticleExtractor;
 
