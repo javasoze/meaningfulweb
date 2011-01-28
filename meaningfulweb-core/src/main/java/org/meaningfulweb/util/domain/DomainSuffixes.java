@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package ly.bit.domain;
+package org.meaningfulweb.util.domain;
 
 import java.io.InputStream;
 import java.util.HashMap;

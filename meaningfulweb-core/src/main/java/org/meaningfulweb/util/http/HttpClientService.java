@@ -1,4 +1,5 @@
 package org.meaningfulweb.util.http;
+
 public interface HttpClientService {
 
   public byte[] get(String url)

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package ly.bit.domain;
+package org.meaningfulweb.util.domain;
 
 /**
  * This class represents the last part of the host name, 

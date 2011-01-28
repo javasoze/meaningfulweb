@@ -4,10 +4,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Pattern;
 
-import ly.bit.domain.DomainSuffix;
-import ly.bit.domain.DomainSuffixes;
-
 import org.apache.commons.lang.StringUtils;
+import org.meaningfulweb.util.domain.DomainSuffix;
+import org.meaningfulweb.util.domain.DomainSuffixes;
 
 /** Utility class for URL analysis */
 public class URLUtil {
