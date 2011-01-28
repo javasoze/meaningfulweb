@@ -1,0 +1,164 @@
+#ig_header_cnt {
+  background-color:#036287; 
+  display:block; 
+  margin:0; 
+  padding:0; 
+  height:85px;
+  position:relative;  
+}
+
+#ig_center_menu { 
+  height:70px; 
+}
+
+#ig_center_menu2 { 
+  height:32px; 
+}
+
+#ig_center_menu, #ig_center_menu2, #ig_center_cnt {
+	margin: 0 auto;
+	width: 964px;
+  position:relative;
+}
+
+.panel {
+  clear: both;
+  font-size: 100%;
+  border-color: #cccccc;
+  border-width: 1px 1px 0 0;
+  border-style: solid solid none none;
+  padding: 10px;
+  margin: 5px 0 0 0;
+  position:relative;
+}
+
+#ig_header_links {
+  color:#ffffff;
+  text-align:right;
+  position:absolute;
+  right:0px;
+  top:5px;
+  width:500px;
+}
+
+#ig_header_links a {
+  color:#ffffff;
+}
+
+#ig_logo {
+  position:absolute;
+}
+
+#ig_subs_cnt {
+  background-color:#edeff4;
+  border-bottom:1px solid #dddddd;
+  height:28px;
+  margin-bottom:15px;
+  position:relative;
+}
+
+#ig_subs_cnt2 {
+  margin-bottom:15px;
+}
+
+#ig_center_subs {
+  position:absolute;
+  left:0px;
+  top:0px;
+}
+
+
+#ig_center_subs ul {
+  list-style-type:none;
+}
+
+#ig_center_subs ul, #ig_center_subs li {
+  margin:0;
+  padding:0;
+}
+
+.ig_subs .ig_sub {
+  float:left;
+}
+
+#ig_sub_home {
+  border-right:1px solid #dddddd;
+  border-left:1px solid #dddddd;
+}
+
+.ig_sub {
+	margin:0;
+	position:relative;
+  border-right:1px solid #dddddd;
+}
+
+.ig_sub .ig_sub_link {
+  color:#515b4c;
+  display:block;
+  font-weight:bold;
+  font-size:11px;
+  height:20px;
+  margin:0;
+  padding:6px 10px 1px 10px;
+  text-align:center;
+}
+
+.ig_sub a:hover {
+  background-color:#297896;
+  text-decoration:underline;
+  color:#ffffff;
+  border-top:1px solid #cfe2d1;
+}
+
+#ig_search_cnt {
+  background-color:#ffffff;
+  width:530px;
+  height:25px;
+}
+
+#ig_search_cnt form {
+  margin:0px;
+  padding:0px;
+}
+
+#ig_search_wrap_cnt {
+  position:absolute;
+  left:130px;
+  top:25px;
+}
+
+#ig_q_box {
+  position:absolute;
+  left:130px;
+  width:350px;
+  font-size:14px;
+  background-color:#f3fff6;
+  padding:0 5px;
+  border:1px solid #dee9e1;
+  margin-top:2px;
+}
+
+#ig_mag_button {
+  position:absolute;
+  bottom:4px;
+  right:5px;
+  border:1px solid #ffffff;
+}
+
+#ig_st_box {
+  border: 1px solid #999999;	
+  width:120px;
+  position:absolute;
+  left:5px;
+  font-size:12px;
+  margin-top:2px;
+}
+
+.b1f, .b2f, .b3f, .b4f{font-size:1px; overflow:hidden; display:block;}
+.b1f {height:1px; background:#fff; margin:0 5px;}
+.b2f {height:1px; background:#fff; margin:0 3px;}
+.b3f {height:1px; background:#fff; margin:0 2px;}
+.b4f {height:2px; background:#fff; margin:0 1px;}
+.contentf {background: #fff;}
+.contentf div {margin-left: 5px;}
+

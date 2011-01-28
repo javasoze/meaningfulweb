@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC 
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+  <definition name="base" template="/WEB-INF/jsp/common/base.jsp">
+    <put-attribute name="header" value="" />
+    <put-attribute name="content" value="" />
+    <put-attribute name="footer" value="" />
+  </definition>
+  
+  <definition name="extract/article" extends="base">
+    <put-attribute name="content" value="/WEB-INF/jsp/extract/article.jsp" />
+  </definition>
+      
+</tiles-definitions>

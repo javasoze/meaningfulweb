@@ -35,7 +35,7 @@
   <description>web content extractor</description>
 
   <properties>
-    <poi.version>3.7</poi.version>
+    <poi.version>3.7</poi.version>    
   </properties>
 
   
@@ -64,8 +64,7 @@
   </build>
   
 
-  <dependencies>
-	<!-- these would be removed after tika-parser is pulled from mvn -->
+  <dependencies>    
 	<dependency>
 		<groupId>de.l3s.boilerpipe</groupId>
 		<artifactId>boilerpipe</artifactId>
@@ -162,6 +161,11 @@
       <artifactId>slf4j-log4j12</artifactId>
       <version>1.5.6</version>
     </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>3.0.5.RELEASE</version>
+    </dependency>     
 	<dependency>
 	   <groupId>junit</groupId>
 	   <artifactId>junit</artifactId>

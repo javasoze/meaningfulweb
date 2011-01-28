@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <comment>Common content extraction properties</comment>
+
+  <entry key="bitly.api.url"></entry>
+  <entry key="bitly.api.login"></entry>
+  <entry key="bitly.api.key"></entry>
+  
+  <entry key="user.agent">Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.10)
+    Gecko/20100915 Ubuntu/10.04 (lucid) Firefox/3.6.10 GTB7.1</entry>
+
+  <entry key="http.connections.total">3000</entry>
+  <entry key="http.connections.per.host">3000</entry>
+  <entry key="http.connections.timeout.seconds">5</entry>
+  <entry key="http.socket.timeout.seconds">10</entry>
+  <entry key="http.tcp.nodelay">true</entry>
+  <entry key="http.solinger.seconds">0</entry>
+  <entry key="http.idle.connection.timeout.seconds">20</entry>
+  <entry key="http.cull.interval">5000</entry>
+
+</properties>

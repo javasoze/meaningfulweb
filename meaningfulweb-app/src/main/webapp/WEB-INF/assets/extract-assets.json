@@ -1,0 +1,24 @@
+[
+    {
+        "paths": ["/extract/article.html"],
+        "meta" : [
+            {
+                "name": "description",
+                "content": "extract.article.description" 
+            },
+            {
+                "name": "keywords",
+                "content": "extract.article.keywords" 
+            }
+        ],
+        "links" : [
+            {
+                "rel": "canonical",
+                "href": "/extract/article.html" 
+            },
+            "/styles/common/form-styles.css",
+            "/styles/common/search-styles.css",
+            "/styles/extract/extract-styles.css" 
+        ] 
+    }
+]

@@ -1,0 +1,102 @@
+{
+  "components": [
+    {
+      "name": "fullcontent",
+      "class": "ly.bit.cext.processors.FullContentProcessor"
+    },
+    {
+      "name": "maincontent",
+      "class": "ly.bit.cext.processors.MainContentProcessor"
+    },
+    {
+      "name": "article",
+      "class": "ly.bit.cext.processors.ArticleProcessor"
+    },
+    {
+      "name": "hyperlink",
+      "class": "ly.bit.cext.processors.HyperlinkProcessor"
+    },
+    {
+      "name": "xpath",
+      "class": "ly.bit.cext.processors.XPathProcessor"
+    },
+    {
+      "name": "xclean",
+      "class": "ly.bit.cext.processors.XPathCleanerProcessor"
+    },
+    {
+      "name": "element",
+      "class": "ly.bit.cext.processors.ElementProcessor"
+    },
+    {
+      "name": "regex",
+      "class": "ly.bit.cext.processors.RegexProcessor"
+    },    
+    {
+      "name": "paragraph",
+      "class": "ly.bit.cext.processors.ParagraphProcessor"
+    },   
+    {
+      "name": "image",
+      "class": "ly.bit.cext.processors.ImageProcessor"
+    },    
+    {
+      "name": "video",
+      "class": "ly.bit.cext.processors.RegexProcessor",
+      "config": {
+        "regexes": {
+          "youtube": ["youtube\\.com\\/v\\/(.*?)&"],
+          "vimeo": ["vimeo.com\\/(\\d+)"]
+        }      
+      }      
+    },
+    {
+      "name": "script",
+      "class": "ly.bit.cext.processors.ScriptProcessor",
+      "config": {
+        "scriptDir": "/home/dennis/scripts/"
+      }
+    },
+    {
+      "name": "command",
+      "class": "ly.bit.cext.processors.SystemCommandProcessor",
+      "config": {
+        "commandDir": "/home/dennis/scripts/"
+      }
+    }    
+  ],
+  "pipelines": [
+    {
+      "name": "metadata",
+      "components": [
+        {
+          "name": "element",
+          "config": {
+            "elements": ["title"],
+            "headers": ["keywords", "description"],            
+            "extractHtml": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "content",
+      "components": [
+        {
+          "name": "element",
+          "config": {
+            "elements": ["h1","h2","h3","h4"],
+            "headers": ["link:canonical"],
+            "extractHtml": false
+          }
+        },      
+        {
+          "name": "article",
+          "config": {
+            "extractHtml": false
+          }
+        }   
+      ]
+    }
+  ]    
+}

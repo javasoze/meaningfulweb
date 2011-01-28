@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:context="http://www.springframework.org/schema/context" xmlns:util="http://www.springframework.org/schema/util"
+  xsi:schemaLocation="
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+  <bean name="httpClientService" class="ly.bit.http.HttpComponentsServiceImpl"
+    init-method="initialize" destroy-method="shutdown">
+    <property name="userAgent" value="${user.agent}" />
+    <property name="connectionsPerHost" value="${http.connections.per.host}" />
+    <property name="connectionsTotal" value="${http.connections.total}" />
+    <property name="connectionTimeoutInSeconds" value="${http.connections.timeout.seconds}" />
+    <property name="socketTimeoutInSeconds" value="${http.socket.timeout.seconds}" />
+    <property name="tcpNoDelay" value="${http.tcp.nodelay}" />
+    <property name="soLingerInSeconds" value="${http.solinger.seconds}" />
+    <property name="idleConnectionTimeoutInSeconds" value="${http.idle.connection.timeout.seconds}" />
+    <property name="cullInterval" value="${http.cull.interval}" />
+  </bean>
+
+  <bean id="contentService" class="ly.bit.cext.ContentServiceImpl">
+    <property name="apiUrl" value="${bitly.api.url}" />
+    <property name="login" value="${bitly.api.login}" />
+    <property name="apiKey" value="${bitly.api.key}" />
+    <property name="httpClientService" ref="httpClientService" />
+    <property name="htmlExtractor" ref="htmlExtractor" />
+  </bean>
+  
+  <bean name="htmlExtractor" class="ly.bit.cext.HtmlExtractor">
+    <property name="processorFactory" ref="htmlContentProcessorFactory" />
+  </bean>
+
+  <bean name="htmlContentProcessorFactory" class="ly.bit.cext.HtmlContentProcessorFactory">
+    <constructor-arg><value>/WEB-INF/conf/cextr.json</value></constructor-arg>
+  </bean>
+  
+</beans>
