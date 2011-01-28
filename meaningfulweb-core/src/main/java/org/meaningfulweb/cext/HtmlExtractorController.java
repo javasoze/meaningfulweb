@@ -32,9 +32,6 @@ public class HtmlExtractorController {
     .getLogger(HtmlExtractorController.class);
 
   @Autowired
-  private ContentService contentService;
-
-  @Autowired
   private HtmlExtractor htmlExtractor;
 
   @Autowired
@@ -74,68 +71,6 @@ public class HtmlExtractorController {
       }
     }
     return output;
-  }
-
-  @RequestMapping(value = "/ghash.json", method = RequestMethod.POST)
-  public @ResponseBody
-  Map extractContentFromGhash(@RequestBody ExtractForm extractForm,
-    HttpServletRequest request, HttpServletResponse response) {
-
-    Map errors = new HashMap();
-
-    // check for blank global hash
-    String globalHash = extractForm.getGlobalHash();
-    if (StringUtils.isBlank(globalHash)) {
-      errors.put("globalhash.required",
-        "Global hash is required and cannot be blank");
-    }
-
-    // check for no processors
-    List<String> components = extractForm.getComponents();
-    boolean hasComponents = (components != null && components.size() > 0);
-    List<String> pipelines = extractForm.getPipelines();
-    boolean hasPipelines = (pipelines != null && pipelines.size() > 0);
-    if (!hasComponents && !hasPipelines) {
-      errors.put("processors.required",
-        "One or more components or pipelines must be specified to process "
-          + "content");
-    }
-
-    // return errors if any exist
-    if (errors.size() > 0) {
-      return errors;
-    }
-
-    // get the archived content
-    Map output = new HashMap();
-    byte[] content;
-    try {
-      content = contentService.getArchivedContent(globalHash);
-    }
-    catch (IOException e) {
-      Map<String, String> errMap = getErrors(e);
-      errors.put("errors", errMap);
-      return errors;
-    }
-
-    // get url info and set url into metadata if found
-    ShortUrlInfo urlInfo = contentService.getUrlInfo(globalHash);
-    if (urlInfo != null) {
-      String url = urlInfo.getUrlFetched();
-      extractForm.getMetadata().put("url", url);
-    }
-
-    // put global hash into metadata
-    extractForm.getMetadata().put("globalHash", globalHash);
-
-    // return an empty map if no content
-    if (content == null || content.length == 0) {
-      return output;
-    }
-
-    // process the content and return anything extracted
-    return extractContent(content, pipelines, components,
-      extractForm.getConfig(), extractForm.getMetadata());
   }
 
   @RequestMapping(value = "/url.json", method = RequestMethod.POST)
@@ -250,10 +185,6 @@ public class HtmlExtractorController {
     // process the content and return anything extracted
     return extractContent(contentBytes, pipelines, components,
       extractForm.getConfig(), extractForm.getMetadata());
-  }
-
-  public void setContentService(ContentService contentService) {
-    this.contentService = contentService;
   }
 
   public void setHtmlExtractor(HtmlExtractor htmlExtractor) {
