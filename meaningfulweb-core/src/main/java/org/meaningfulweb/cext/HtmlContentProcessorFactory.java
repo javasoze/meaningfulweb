@@ -6,12 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import ly.bit.util.JsonUtils;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonNode;
+import org.meaningfulweb.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
