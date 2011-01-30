@@ -85,6 +85,7 @@ public class MetaContentExtractor {
 		ogMeta.put("url", url);
 	  }
 	  else if ("text".equals(type.getType())){
+		ogMeta.put("type", "text");
 		String subtype = type.getSubtype();
 		if ("plain".equals(subtype)){
 			parseMeta(_txtParser,in,meta,ogMeta);
