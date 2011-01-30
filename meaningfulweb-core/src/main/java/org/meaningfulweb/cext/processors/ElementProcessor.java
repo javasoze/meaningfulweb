@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.meaningfulweb.cext.HtmlContentProcessor;
-import org.meaningfulweb.cext.JDomUtils;
+import org.meaningfulweb.util.JDomUtils;
 import org.meaningfulweb.util.XMLUtils;
 
 import org.apache.commons.lang.StringUtils;

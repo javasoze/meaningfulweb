@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.meaningfulweb.cext.HtmlContentProcessor;
-import org.meaningfulweb.cext.JDomUtils;
+import org.meaningfulweb.util.JDomUtils;
 import org.meaningfulweb.util.URLUtil;
 
 import org.apache.commons.lang.StringUtils;

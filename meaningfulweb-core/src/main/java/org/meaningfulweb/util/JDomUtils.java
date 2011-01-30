@@ -1,4 +1,4 @@
-package org.meaningfulweb.cext;
+package org.meaningfulweb.util;
 import org.apache.commons.lang.StringUtils;
 import org.jdom.Attribute;
 import org.jdom.Element;
