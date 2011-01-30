@@ -62,7 +62,7 @@ public class ImageProcessor
         Attribute srcAttr = elem.getAttribute("src");
         String src = null;
         if (srcAttr != null) {
-          src = StringUtils.lowerCase(srcAttr.getValue());
+          src = srcAttr.getValue();
         }
 
         boolean hasWidth = (!removeImagesNoWidthHeight && width == -1)

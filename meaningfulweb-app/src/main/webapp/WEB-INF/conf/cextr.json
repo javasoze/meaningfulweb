@@ -45,6 +45,10 @@
       "class": "org.meaningfulweb.cext.processors.ImageProcessor"
     },    
     {
+      "name": "bestimage",
+      "class": "org.meaningfulweb.cext.processors.BestImageProcessor"
+    },      
+    {
       "name": "video",
       "class": "org.meaningfulweb.cext.processors.RegexProcessor",
       "config": {

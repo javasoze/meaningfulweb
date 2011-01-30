@@ -11,7 +11,8 @@ import org.meaningfulweb.util.domain.DomainSuffixes;
 /** Utility class for URL analysis */
 public class URLUtil {
 
-  private static Pattern IP_PATTERN = Pattern.compile("(\\d{1,3}\\.){3}(\\d{1,3})");
+  private static Pattern IP_PATTERN = Pattern
+    .compile("(\\d{1,3}\\.){3}(\\d{1,3})");
 
   /** Returns the domain name of the url. The domain name of a url is
    *  the substring of the url's hostname, w/o subdomain names. As an
@@ -23,19 +24,19 @@ public class URLUtil {
   public static String getDomainName(URL url) {
     DomainSuffixes tlds = DomainSuffixes.getInstance();
     String host = url.getHost();
-    //it seems that java returns hostnames ending with .
-    if(host.endsWith("."))
+    // it seems that java returns hostnames ending with .
+    if (host.endsWith("."))
       host = host.substring(0, host.length() - 1);
-    if(IP_PATTERN.matcher(host).matches())
+    if (IP_PATTERN.matcher(host).matches())
       return host;
-    
+
     int index = 0;
     String candidate = host;
-    for(;index >= 0;) {
+    for (; index >= 0;) {
       index = candidate.indexOf('.');
-      String subCandidate = candidate.substring(index+1); 
-      if(tlds.isDomainSuffix(subCandidate)) {
-        return candidate; 
+      String subCandidate = candidate.substring(index + 1);
+      if (tlds.isDomainSuffix(subCandidate)) {
+        return candidate;
       }
       candidate = subCandidate;
     }
@@ -50,7 +51,8 @@ public class URLUtil {
    *  will return <br><code> apache.org</code>
    * @throws MalformedURLException
    */
-  public static String getDomainName(String url) throws MalformedURLException {
+  public static String getDomainName(String url)
+    throws MalformedURLException {
     return getDomainName(new URL(url));
   }
 
@@ -85,17 +87,17 @@ public class URLUtil {
   public static DomainSuffix getDomainSuffix(URL url) {
     DomainSuffixes tlds = DomainSuffixes.getInstance();
     String host = url.getHost();
-    if(IP_PATTERN.matcher(host).matches())
+    if (IP_PATTERN.matcher(host).matches())
       return null;
-    
+
     int index = 0;
     String candidate = host;
-    for(;index >= 0;) {
+    for (; index >= 0;) {
       index = candidate.indexOf('.');
-      String subCandidate = candidate.substring(index+1);
+      String subCandidate = candidate.substring(index + 1);
       DomainSuffix d = tlds.get(subCandidate);
-      if(d != null) {
-        return d; 
+      if (d != null) {
+        return d;
       }
       candidate = subCandidate;
     }
@@ -105,24 +107,26 @@ public class URLUtil {
   /** Returns the {@link DomainSuffix} corresponding to the
    * last public part of the hostname
    */
-  public static DomainSuffix getDomainSuffix(String url) throws MalformedURLException {
+  public static DomainSuffix getDomainSuffix(String url)
+    throws MalformedURLException {
     return getDomainSuffix(new URL(url));
   }
 
   /** Partitions of the hostname of the url by "."  */
   public static String[] getHostSegments(URL url) {
     String host = url.getHost();
-    //return whole hostname, if it is an ipv4
-    //TODO : handle ipv6
-    if(IP_PATTERN.matcher(host).matches())
-      return new String[] {host};
+    // return whole hostname, if it is an ipv4
+    // TODO : handle ipv6
+    if (IP_PATTERN.matcher(host).matches())
+      return new String[]{host};
     return host.split("\\.");
   }
 
   /** Partitions of the hostname of the url by "."
    * @throws MalformedURLException */
-  public static String[] getHostSegments(String url) throws MalformedURLException {
-   return getHostSegments(new URL(url));
+  public static String[] getHostSegments(String url)
+    throws MalformedURLException {
+    return getHostSegments(new URL(url));
   }
 
   /**
@@ -160,7 +164,7 @@ public class URLUtil {
       return null;
     }
   }
-  
+
   public static String getProtocol(String url) {
     try {
       // get the full url, and replace the query string with and empty string
@@ -172,7 +176,7 @@ public class URLUtil {
       return null;
     }
   }
-  
+
   public static String stripProtocol(String url) {
     try {
       // get the full url, and replace the query string with and empty string
@@ -184,10 +188,45 @@ public class URLUtil {
       return null;
     }
   }
-  
+
   public static String getExtension(String filename) {
     int extIndex = StringUtils.lastIndexOf(filename, ".");
     return extIndex > 0 && extIndex + 1 < filename.length() ? StringUtils
       .substring(filename, extIndex + 1) : null;
+  }
+
+  public static String toAbsoluteURL(String baseURL, String relativeURL) {
+    
+    // first we try to use java.net.URL to perform the conversion, if that
+    // fails we can try using our own routine.
+    try {
+      URL base = new URL(baseURL);
+      String absolute = new URL(base, relativeURL).toExternalForm();
+      return absolute;
+    }
+    catch (MalformedURLException e) {
+
+      if (baseURL == null || baseURL.length() < 8)
+        throw new IllegalArgumentException("baseURL must be a valid URL");
+      if (relativeURL == null)
+        return null;
+
+      // rooted relative URL
+      if (relativeURL.startsWith("/")) {
+        int pos = baseURL.indexOf("/", 8);
+        if (pos > -1) {
+          baseURL = baseURL.substring(0, pos);
+        }
+      }
+      else {
+        int slashPosition = baseURL.lastIndexOf('/');
+        if (slashPosition < 0)
+          throw new IllegalArgumentException("baseURL must be a valid URL");
+        baseURL = baseURL.substring(0, slashPosition);
+        relativeURL = "/" + relativeURL;
+      }
+
+      return baseURL + relativeURL;
+    }
   }
 }
