@@ -32,23 +32,62 @@
   <artifactId>meaningfulweb-app</artifactId>
   <packaging>war</packaging>
   <name>meaningfulweb-app</name>
-
+  
   <build>
+    <resources>
+      <resource>
+        <directory>${project.build.sourceDirectory}</directory>
+        <includes>
+          <include>**/*.xml</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav</artifactId>
+        <version>1.0-beta-2</version>
+      </extension>
+    </extensions>      
     <plugins>
-        <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-war-plugin</artifactId>
-      <version>2.1.1</version>
-      <configuration>
-       <encoding>UTF-8</encoding>
-      </configuration>
-    </plugin>
-    <plugin>
-      <groupId>org.mortbay.jetty</groupId>
-      <artifactId>maven-jetty-plugin</artifactId>
-    </plugin>
-    </plugins>
-  </build>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>           
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>maven-jetty-plugin</artifactId>
+        <version>6.1.26</version>
+        <configuration>
+          <scanIntervalSeconds>0</scanIntervalSeconds>
+          <webAppConfig>
+            <contextPath>/</contextPath>
+          </webAppConfig>        
+          <scanTargetPatterns>
+            <scanTargetPattern>
+              <directory>src/main/webapp/WEB-INF</directory>
+              <includes>
+                <include>**/*.xml</include>
+              </includes>
+            </scanTargetPattern>
+          </scanTargetPatterns>
+        </configuration>        
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.1</version>
+      </plugin>      
+    </plugins>      
+  </build>  
   
 
   <dependencies>

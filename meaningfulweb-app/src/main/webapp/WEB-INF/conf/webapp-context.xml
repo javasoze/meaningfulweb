@@ -9,38 +9,11 @@
      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
      http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
-  <context:component-scan base-package="ly.bit" />
+  <context:component-scan base-package="org.meaningfulweb" />
   <context:property-placeholder location="/WEB-INF/props/**/*-props.xml" />
   <tx:annotation-driven />
   <mvc:annotation-driven />
   <mvc:default-servlet-handler />
-  
-  <bean id="messageSource"
-    class="com.igfoo.core.web.PatternReloadableResourceBundleMessageSource">
-    <property name="cacheSeconds" value="1" />
-    <property name="resources">
-      <list>
-        <value>/WEB-INF/bundles/**/*_i18n.xml</value>
-      </list>
-    </property>
-  </bean>
-
-  <bean id="tilesConfigurer" 
-    class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
-    <property name="definitions">
-      <list>
-        <value>/WEB-INF/tiles/**/*-tiles.xml</value>
-      </list>
-    </property>
-  </bean>
-
-  <bean id="assetManager" class="com.igfoo.core.web.ReloadableAssetManager"
-    init-method="initialize" destroy-method="shutdown">
-    <property name="rootDir" value="${webapp.root}" />
-    <property name="resources" value="/WEB-INF/assets/**/*-assets.json" />
-    <property name="reloadInterval" value="5000" />
-    <property name="caching" value="true" />
-  </bean>
   
   <bean
     class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
@@ -51,12 +24,6 @@
   <bean id="viewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
     <property name="order" value="1" />
     <property name="location" value="/WEB-INF/conf/views.xml" />
-  </bean>
-
-  <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-    <property name="order" value="2" />
-    <property name="viewClass"
-      value="org.springframework.web.servlet.view.tiles2.TilesView" />
   </bean>
 
 </beans>

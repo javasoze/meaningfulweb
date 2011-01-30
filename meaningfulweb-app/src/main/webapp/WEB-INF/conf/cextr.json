@@ -2,47 +2,51 @@
   "components": [
     {
       "name": "fullcontent",
-      "class": "ly.bit.cext.processors.FullContentProcessor"
+      "class": "org.meaningfulweb.cext.processors.FullContentProcessor"
     },
     {
       "name": "maincontent",
-      "class": "ly.bit.cext.processors.MainContentProcessor"
+      "class": "org.meaningfulweb.cext.processors.MainContentProcessor"
     },
     {
       "name": "article",
-      "class": "ly.bit.cext.processors.ArticleProcessor"
+      "class": "org.meaningfulweb.cext.processors.ArticleProcessor"
     },
     {
       "name": "hyperlink",
-      "class": "ly.bit.cext.processors.HyperlinkProcessor"
+      "class": "org.meaningfulweb.cext.processors.HyperlinkProcessor"
     },
     {
       "name": "xpath",
-      "class": "ly.bit.cext.processors.XPathProcessor"
+      "class": "org.meaningfulweb.cext.processors.XPathProcessor"
     },
     {
       "name": "xclean",
-      "class": "ly.bit.cext.processors.XPathCleanerProcessor"
+      "class": "org.meaningfulweb.cext.processors.XPathCleanerProcessor"
     },
     {
       "name": "element",
-      "class": "ly.bit.cext.processors.ElementProcessor"
+      "class": "org.meaningfulweb.cext.processors.ElementProcessor"
     },
     {
+      "name": "opengraph",
+      "class": "org.meaningfulweb.cext.processors.OpengraphContentProcessor"
+    },    
+    {
       "name": "regex",
-      "class": "ly.bit.cext.processors.RegexProcessor"
+      "class": "org.meaningfulweb.cext.processors.RegexProcessor"
     },    
     {
       "name": "paragraph",
-      "class": "ly.bit.cext.processors.ParagraphProcessor"
+      "class": "org.meaningfulweb.cext.processors.ParagraphProcessor"
     },   
     {
       "name": "image",
-      "class": "ly.bit.cext.processors.ImageProcessor"
+      "class": "org.meaningfulweb.cext.processors.ImageProcessor"
     },    
     {
       "name": "video",
-      "class": "ly.bit.cext.processors.RegexProcessor",
+      "class": "org.meaningfulweb.cext.processors.RegexProcessor",
       "config": {
         "regexes": {
           "youtube": ["youtube\\.com\\/v\\/(.*?)&"],
@@ -52,16 +56,16 @@
     },
     {
       "name": "script",
-      "class": "ly.bit.cext.processors.ScriptProcessor",
+      "class": "org.meaningfulweb.cext.processors.ScriptProcessor",
       "config": {
-        "scriptDir": "/home/dennis/scripts/"
+        "scriptDir": "/etc/meaningfulweb/scripts/"
       }
     },
     {
       "name": "command",
-      "class": "ly.bit.cext.processors.SystemCommandProcessor",
+      "class": "org.meaningfulweb.cext.processors.SystemCommandProcessor",
       "config": {
-        "commandDir": "/home/dennis/scripts/"
+        "commandDir": "/etc/meaningfulweb/scripts/"
       }
     }    
   ],
