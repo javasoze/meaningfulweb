@@ -15,8 +15,9 @@ url --> meaningfulweb engine --> structured information
 Build and release are managed via Maven: http://maven.apache.org/
 
 1. run the script: bin/mvn-install.sh to install .jar files in jars/ to local maven repo
-2. build core: under meaningfulweb-core/, do: mvn install
-3. start webapp: under meaningfulweb-app/, do: mvn jetty:run
+2. build opengraph: under meaningfulweb-opengraph/, do: mvn install
+3. build core: under meaningfulweb-core/, do: mvn install
+4. start webapp: under meaningfulweb-app/, do: mvn jetty:run
 
 application should be running at: http://localhost:8080/meaningfulweb-app/
 

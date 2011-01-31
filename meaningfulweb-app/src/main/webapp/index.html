@@ -9,6 +9,8 @@
 	var r = null;
 	$(function() {
 		$('#doExtract').click(function(e) {
+			var div = $('#extractionResult').empty();
+			div.append('<h3 align="center"><i>Working ... </i></h3>');
 			doExtract($('#url').val(), function (data){
 				r = data;
 				var div = $('#extractionResult').empty();
@@ -56,14 +58,12 @@
 	</script>
 	</head>
 	<body>
-		<p align="center">
-		<h1>Meaningful Web</h1>
-		</p>
+		<h1 align="center">Meaningful Web</h1>
 		<p align="center">
 		Enter url: <input id="url" type="text" />
 		<input type="button" id="doExtract" value="extract content" /><br/>
-	</p>
-	<div id="extractionResult">
-	</div>
+		</p>
+		<div id="extractionResult">
+		</div>
 	</body>
 </html>
