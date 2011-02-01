@@ -68,11 +68,14 @@ public class HtmlContentProcessorFactory {
       }
     }
   }
+  
+  public HtmlContentProcessorFactory(Resource configRes) throws Exception{
+	  this(configRes.getFile());
+  }
 
-  public HtmlContentProcessorFactory(Resource configRes)
+  public HtmlContentProcessorFactory(File configFile)
     throws Exception {
 
-    File configFile = configRes.getFile();
     JsonNode root = JsonUtils.parseJson(FileUtils.readFileToString(configFile));
 
     JsonNode compNodes = root.get("components");
