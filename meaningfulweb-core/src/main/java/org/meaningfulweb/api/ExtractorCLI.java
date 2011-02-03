@@ -26,7 +26,8 @@ public class ExtractorCLI {
 
     // the config file and the url
     File configFile = new File("config/cextr.json");
-    String url = "http://twitpic.com/3sryl9";
+    //String url = "http://twitpic.com/3sryl9";
+    String url = "http://www.youtube.com/watch?v=7rE0-ek6MZA&feature=topvideos";
     HtmlContentProcessorFactory processorFactory = new HtmlContentProcessorFactory(
       configFile);
     HtmlExtractor htmlExtractor = new HtmlExtractor();
@@ -38,8 +39,18 @@ public class ExtractorCLI {
     Map<String, Object> config = new HashMap<String, Object>();
     config.put("perComponentDOM", false);
     config.put("perPipelineDOM", true);
-    config.put("fullcontent.extractHtml", true);
-    config.put("fullcontent.extractText", true);
+    
+    
+    Map elementConfig = new HashMap();    
+    List<String> elementsList = new ArrayList<String>();
+    elementsList.add("title");
+    elementConfig.put("elements", elementsList);
+    elementConfig.put("extractHtml", false);
+    config.put("element", elementConfig);
+    
+    Map opengraphConfig = new HashMap(); 
+    opengraphConfig.put("includeAll", true);
+    config.put("opengraph", opengraphConfig);
 
     // create base metadata
     Map<String, Object> metadata = new HashMap<String, Object>();
@@ -48,7 +59,15 @@ public class ExtractorCLI {
     // create the pipelines and components to run
     List<String> pipelines = new ArrayList<String>();
     List<String> components = new ArrayList<String>();
-    components.add("fullcontent");
+    //components.add("fullcontent");
+    //components.add("bestimage");
+    components.add("opengraph");
+    components.add("element");
+    //components.add("article");
+    
+    //pipelines.add("metadata");
+    //pipelines.add("content");
+    
 
     // get the html from the url
     long start = System.currentTimeMillis();
