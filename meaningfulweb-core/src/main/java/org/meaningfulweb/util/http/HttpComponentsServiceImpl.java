@@ -187,6 +187,20 @@ public class HttpComponentsServiceImpl
     active.set(false);
     httpClient.getConnectionManager().shutdown();
   }
+  
+  public byte[] get(InputStream is) throws IOException{
+	ByteArrayOutputStream baos = null;
+
+    try {
+      baos = new ByteArrayOutputStream();
+      IOUtils.copy(is, baos);
+      return baos.toByteArray();
+    }
+    finally {
+      IOUtils.closeQuietly(is);
+      IOUtils.closeQuietly(baos);
+    }
+  }
 
   public byte[] get(String url)
     throws HttpException {
@@ -223,20 +237,9 @@ public class HttpComponentsServiceImpl
       }
 
       if (entity != null) {
-
         InputStream is = null;
-        ByteArrayOutputStream baos = null;
-
-        try {
-          is = entity.getContent();
-          baos = new ByteArrayOutputStream();
-          IOUtils.copy(is, baos);
-          return baos.toByteArray();
-        }
-        finally {
-          IOUtils.closeQuietly(is);
-          IOUtils.closeQuietly(baos);
-        }
+        is = entity.getContent();
+        return get(is);
       }
 
       return null;

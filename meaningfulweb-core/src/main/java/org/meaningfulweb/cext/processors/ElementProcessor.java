@@ -62,6 +62,12 @@ public class ElementProcessor
         }
         if (metaIdent != null) {
           metaIdent = StringUtils.trim(StringUtils.lowerCase(metaIdent));
+          Map<String,Object> extractedMap = this.getExtracted();
+          
+          // image already extracted
+          if (extractedMap.containsKey("image")){
+          	return;
+          }
           if (headers.contains(metaIdent)) {
             String metaValue = JDomUtils.getAttributeValue(elem, "content");
             if (StringUtils.isNotBlank(metaValue)) {

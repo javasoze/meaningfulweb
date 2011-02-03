@@ -1,8 +1,10 @@
 package org.meaningfulweb.cext;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,8 +48,8 @@ public class HtmlExtractorController {
     return errMap;
   }
 
-  private Map extractContent(byte[] content, List<String> pipelines,
-    List<String> components, Map<String, Object> config,
+  private Map extractContent(byte[] content, Set<String> pipelines,
+    Set<String> components, Map<String, Object> config,
     Map<String, Object> metadata) {
 
     Map output = new HashMap();
@@ -119,9 +121,16 @@ public class HtmlExtractorController {
     if (content == null || content.length == 0) {
       return output;
     }
+    
+    
+    HashSet<String> componetSet = new HashSet<String>();
+    componetSet.addAll(components);
+
+    HashSet<String> pipelineSet = new HashSet<String>();
+    pipelineSet.addAll(pipelines);
 
     // process the content and return anything extracted
-    return extractContent(content, pipelines, components,
+    return extractContent(content, pipelineSet, componetSet,
       extractForm.getConfig(), extractForm.getMetadata());
   }
 
@@ -180,8 +189,13 @@ public class HtmlExtractorController {
       return output;
     }
 
+    HashSet<String> componetSet = new HashSet<String>();
+    componetSet.addAll(components);
+
+    HashSet<String> pipelineSet = new HashSet<String>();
+    pipelineSet.addAll(pipelines);
     // process the content and return anything extracted
-    return extractContent(contentBytes, pipelines, components,
+    return extractContent(contentBytes, pipelineSet, componetSet,
       extractForm.getConfig(), extractForm.getMetadata());
   }
 

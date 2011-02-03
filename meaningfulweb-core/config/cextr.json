@@ -1,0 +1,116 @@
+{
+  "components": [
+    {
+      "name": "fullcontent",
+      "class": "org.meaningfulweb.cext.processors.FullContentProcessor"
+    },
+    {
+      "name": "maincontent",
+      "class": "org.meaningfulweb.cext.processors.MainContentProcessor"
+    },
+    {
+      "name": "article",
+      "class": "org.meaningfulweb.cext.processors.ArticleProcessor"
+    },
+    {
+      "name": "hyperlink",
+      "class": "org.meaningfulweb.cext.processors.HyperlinkProcessor"
+    },
+    {
+      "name": "xpath",
+      "class": "org.meaningfulweb.cext.processors.XPathProcessor"
+    },
+    {
+      "name": "xclean",
+      "class": "org.meaningfulweb.cext.processors.XPathCleanerProcessor"
+    },
+    {
+      "name": "element",
+      "class": "org.meaningfulweb.cext.processors.ElementProcessor"
+    },
+    {
+      "name": "regex",
+      "class": "org.meaningfulweb.cext.processors.RegexProcessor"
+    },    
+    {
+      "name": "paragraph",
+      "class": "org.meaningfulweb.cext.processors.ParagraphProcessor"
+    },   
+    {
+      "name": "image",
+      "class": "org.meaningfulweb.cext.processors.ImageProcessor"
+    },    
+    {
+      "name": "video",
+      "class": "org.meaningfulweb.cext.processors.RegexProcessor",
+      "config": {
+        "regexes": {
+          "youtube": ["youtube\\.com\\/v\\/(.*?)&"],
+          "vimeo": ["vimeo.com\\/(\\d+)"]
+        }      
+      }      
+    },
+    {
+      "name": "script",
+      "class": "org.meaningfulweb.cext.processors.ScriptProcessor",
+      "config": {
+        "scriptDir": "/home/dennis/scripts/"
+      }
+    },
+    {
+      "name": "command",
+      "class": "org.meaningfulweb.cext.processors.SystemCommandProcessor",
+      "config": {
+        "commandDir": "/home/dennis/scripts/"
+      }
+    },
+    {
+      "name": "bestimage",
+      "class": "org.meaningfulweb.cext.processors.BestImageProcessor"
+    }, 
+    {
+      "name": "opengraph",
+      "class": "org.meaningfulweb.cext.processors.OpengraphContentProcessor"
+    }   
+  ],
+  "pipelines": [
+    {
+      "name": "metadata",
+      "components": [
+        {
+          "name":"opengraph"
+        },
+        {
+          "name": "element",
+          "config": {
+            "elements": ["title"],
+            "headers": ["keywords", "description","image"],            
+            "extractHtml": false
+          }
+        },
+        {
+           "name" : "bestimage"
+        }
+      ]
+    },
+    {
+      "name": "content",
+      "components": [
+        {
+          "name": "element",
+          "config": {
+            "elements": ["h1","h2","h3","h4"],
+            "headers": ["link:canonical"],
+            "extractHtml": false
+          }
+        },      
+        {
+          "name": "article",
+          "config": {
+            "extractHtml": false
+          }
+        }
+      ]
+    }
+  ]    
+}

@@ -1,6 +1,7 @@
 package org.meaningfulweb.cext;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.tika.parser.txt.CharsetDetector;
@@ -71,9 +72,9 @@ public class HtmlExtractor {
     Map<String, Object> extracted = extract.getExtracted();
 
     // one or more components in a given order
-    List<String> compNames = extract.getComponents();
+    Set<String> compNames = extract.getComponents();
     if (compNames != null && compNames.size() > 0) {
-      for (int i = 0; i < compNames.size(); i++) {
+      for (String compName : compNames) {
 
         // components can share dom or each can get a clean copy
         Document tempDoc = doc;
@@ -84,8 +85,7 @@ public class HtmlExtractor {
           tempDoc.addContent(doc.cloneContent());
         }
 
-        HtmlContentProcessor processor = processorFactory.getComponent(
-          compNames.get(i), runtime);
+        HtmlContentProcessor processor = processorFactory.getComponent(compName, runtime);
         processor.setMetadata(metadata);
         processor.processContent(tempDoc);
 
@@ -99,9 +99,9 @@ public class HtmlExtractor {
     }
 
     // one or more pipelines in a given order
-    List<String> plNames = extract.getPipelines();
+    Set<String> plNames = extract.getPipelines();
     if (plNames != null && plNames.size() > 0) {
-      for (int i = 0; i < plNames.size(); i++) {
+      for (String name : plNames) {
 
         // pipelines can share dom or each can get a clean copy
         Document tempDoc = doc;
@@ -112,10 +112,10 @@ public class HtmlExtractor {
           tempDoc.addContent(doc.cloneContent());
         }
 
-        String name = plNames.get(i);
         HtmlContentPipeline pipeline = processorFactory.getPipeline(name,
           runtime);
         if (pipeline != null) {
+          pipeline.setMetadata(metadata);
           Map<String, Object> plOutput = pipeline.processPipeline(tempDoc);
           extracted.putAll(plOutput);
         }

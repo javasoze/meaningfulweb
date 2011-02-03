@@ -2,6 +2,7 @@ package org.meaningfulweb.cext.processors;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -143,7 +144,13 @@ public class BestImageProcessor
 
   @Override
   public boolean processContent(Document document) {
-
+    Map<String,Object> extractedMap = this.getExtracted();
+    
+    // image already extracted
+    if (extractedMap.containsKey("image")){
+    	return true;
+    }
+    
     String baseUrl = null;
     String url = (String)getMetadata().get("url");
     String protocol = URLUtil.getProtocol(url);

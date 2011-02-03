@@ -1,14 +1,16 @@
 package org.meaningfulweb.api;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.lang.StringUtils;
 import org.apache.tika.detect.Detector;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
@@ -16,28 +18,21 @@ import org.apache.tika.mime.MediaType;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
-import org.apache.tika.parser.html.BoilerpipeContentHandler;
 import org.apache.tika.parser.html.HtmlParser;
-import org.apache.tika.parser.image.ExtractedContents;
-import org.apache.tika.parser.image.ImageExtractionContentHandler;
 import org.apache.tika.parser.image.ImageFetcher;
 import org.apache.tika.parser.image.ImageFilter;
-import org.apache.tika.parser.image.ImageInfo;
-import org.apache.tika.parser.image.ImageMeta;
 import org.apache.tika.parser.image.ImageSelector;
 import org.apache.tika.parser.txt.TXTParser;
-import org.apache.tika.sax.BodyContentHandler;
+import org.meaningfulweb.cext.Extract;
+import org.meaningfulweb.cext.HtmlContentProcessorFactory;
+import org.meaningfulweb.cext.HtmlExtractor;
 import org.meaningfulweb.detector.DetectorBuilder;
+import org.meaningfulweb.opengraph.OGObject;
+import org.meaningfulweb.util.http.HttpComponentsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
-import org.meaningfulweb.opengraph.OGObject;
-import org.meaningfulweb.opengraph.OpenGraphParser;
-import de.l3s.boilerpipe.document.TextDocument;
-import de.l3s.boilerpipe.extractors.ArticleExtractor;
 
 public class MetaContentExtractor {
 
@@ -54,11 +49,79 @@ public class MetaContentExtractor {
 	
 	private final ImageSelector imgSelector = new ImageSelector(imageFilter,imageFetcher);
 	
-	public MetaContentExtractor(){
+	private final HtmlContentProcessorFactory processorFactory;
+	private final HtmlExtractor htmlExtractor;
+	private final HttpComponentsServiceImpl httpClientService = new HttpComponentsServiceImpl();
+	
+	public MetaContentExtractor(File configFile) throws Exception{
 	  _detector = DetectorBuilder.getInstance(null).buildDetector();
 	  _autoParser = new AutoDetectParser(_detector);
 	  _txtParser = new TXTParser();
 	  _htmlParser = new HtmlParser();
+	  processorFactory = new HtmlContentProcessorFactory(configFile);
+	  htmlExtractor = new HtmlExtractor();
+	  htmlExtractor.setProcessorFactory(processorFactory);
+	  httpClientService.initialize();
+	}
+	
+	private Map doExtractFromHtml(String url,InputStream in,Set<String> components,
+			Set<String> pipelines,Map<String,Object> config,Map<String,Object> meta) throws Exception{
+			    // check for blank global hash
+	    if (StringUtils.isBlank(url)) {
+	      throw new IllegalArgumentException("url.required: Url is required and cannot be blank");
+	    }
+
+	    // check for no processors
+	    boolean hasComponents = (components != null && components.size() > 0);
+	    boolean hasPipelines = (pipelines != null && pipelines.size() > 0);
+	    if (!hasComponents && !hasPipelines) {
+	      throw new Exception("processors.requiredL "+
+	        "One or more components or pipelines must be specified to process "
+	          + "content");
+	    }
+
+	    // get the url content
+
+	    byte[] content;
+	    try {
+	      content = httpClientService.get(in);
+	    }
+	    catch (Exception e) {
+	      throw e;
+	    }
+
+	    // return an empty map if no content
+	    if (content == null || content.length == 0) {
+	      return new HashMap();
+	    }
+
+	    // process the content and return anything extracted
+	    return extractContent(content, pipelines, components,config,meta);
+	}
+	
+	private Map extractContent(byte[] content, Set<String> pipelines,
+	  Set<String> components, Map<String, Object> config,
+	  Map<String, Object> metadata) {
+	
+	  Map output = new HashMap();
+	  if (content != null && content.length > 0) {
+	
+	      Extract extract = new Extract();
+	      extract.setPipelines(pipelines);
+	      extract.setComponents(components);
+	      extract.setConfig(config);
+	      extract.setContent(content);
+	      extract.setMetadata(metadata);
+	
+	      try {
+	        htmlExtractor.extract(extract);
+	        output = extract.getExtracted();
+	      }
+	      catch (Exception e) {
+	        logger.error("Error extracting content", e);
+	      }
+	  }
+	  return output;
 	}
 	
 	static String trim(String str){
@@ -90,58 +153,18 @@ public class MetaContentExtractor {
 			parseMeta(_txtParser,in,meta,ogMeta);
 		}
 		else if ("html".equals(subtype)){
-			/*obj = OpenGraphParser.parse(new InputStreamReader(in,charset));
-			ogMeta = obj.getMeta();
-			String title = obj.getTitle();
-			String desc = obj.getDescription();
-			String img = obj.getImage();
-			*/
-			String title = null;
-			String desc = null;
-			String img = null;
 
-			List<ImageMeta> imgInfos = new LinkedList<ImageMeta>();
-			
-			if (title==null || desc==null){
-				ArticleExtractor articleExtractor = new ArticleExtractor();	
-				BoilerpipeContentHandler handler = null;
-				ContentHandler baseHandler;
-				if (img == null){
-					baseHandler = new ImageExtractionContentHandler(imgInfos);
-				}
-				else{
-					baseHandler = new DefaultHandler();
-				}
-				BodyContentHandler bodyhandler = new BodyContentHandler(baseHandler);
-				handler =  new BoilerpipeContentHandler(bodyhandler,articleExtractor);
-				
-				_htmlParser.parse(in, handler, meta, new ParseContext());
-				title = trim(meta.get(Metadata.TITLE));
-				TextDocument textDoc = handler.toTextDocument();
-				desc = articleExtractor.getText(textDoc);
-				
-				ExtractedContents extractedContents = new ExtractedContents(url,imgInfos);
-				
-				ImageInfo mediaContentInfo = imgSelector.getBestImage(extractedContents, url, true, true);
-				img = mediaContentInfo == null ? "" : mediaContentInfo.getUri();
-				
-			}
-			else if (img == null){
-				ImageExtractionContentHandler handler = new ImageExtractionContentHandler(imgInfos);
-				_htmlParser.parse(in, handler, meta, new ParseContext());
-                ExtractedContents extractedContents = new ExtractedContents(url,imgInfos);
-				
-				ImageInfo mediaContentInfo = imgSelector.getBestImage(extractedContents, url, true, true);
-				img = mediaContentInfo == null ? "" : mediaContentInfo.getUri();
-			}
-			
+		    Map<String,Object> metaMap = new HashMap<String,Object>();
+		    metaMap.put("url", url);
+		    Map<String,Object> config = new HashMap<String,Object>();
+			Map extracted = doExtractFromHtml(url,in,processorFactory.getComponentNames(),processorFactory.getPipelineNames(),config,metaMap);
 			
 			// We now have a string of text from the the page.
-			ogMeta.put("url", url);
-			ogMeta.put("title",title);
-			ogMeta.put("description", desc);
-			ogMeta.put("image", img);
-			
+			//ogMeta.put("url", url);
+			ogMeta.put("title",(String)extracted.get("title"));
+			//ogMeta.put("description", desc);
+			ogMeta.put("image", (String)extracted.get("image"));
+			//System.out.println("extracted out: "+extracted);
 			
 		}
 	  }
@@ -156,8 +179,10 @@ public class MetaContentExtractor {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		MetaContentExtractor extractor = new MetaContentExtractor();
+		File confFile = new File("config/cextr.json");
+		MetaContentExtractor extractor = new MetaContentExtractor(confFile);
 		String url = "http://twitpic.com/3sryl9";
+		
         HttpClient httpClient = new HttpClient();
 		
 		GetMethod get = new GetMethod(url);
