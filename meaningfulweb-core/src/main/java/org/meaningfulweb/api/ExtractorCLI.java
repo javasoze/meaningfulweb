@@ -32,7 +32,9 @@ public class ExtractorCLI {
       configFile);
     HtmlExtractor htmlExtractor = new HtmlExtractor();
     htmlExtractor.setProcessorFactory(processorFactory);
+   
     HttpComponentsServiceImpl httpclient = new HttpComponentsServiceImpl();
+    
     httpclient.initialize();
 
     // create base config
@@ -45,6 +47,12 @@ public class ExtractorCLI {
     List<String> elementsList = new ArrayList<String>();
     elementsList.add("title");
     elementConfig.put("elements", elementsList);
+
+    List<String> headerList = new ArrayList<String>();
+    headerList.add("keywords");
+    headerList.add("description");
+    headerList.add("image");
+    elementConfig.put("headers", headerList);
     elementConfig.put("extractHtml", false);
     config.put("element", elementConfig);
     
@@ -57,7 +65,6 @@ public class ExtractorCLI {
     metadata.put("url", url);
 
     // create the pipelines and components to run
-    List<String> pipelines = new ArrayList<String>();
     List<String> components = new ArrayList<String>();
     //components.add("fullcontent");
     //components.add("bestimage");
@@ -91,17 +98,10 @@ public class ExtractorCLI {
         extract.setMetadata(metadata);
 
         try {
-
-          // add extraction pipelines
-          if (pipelines != null && pipelines.size() > 0) {
-            extract.getPipelines().addAll(pipelines);
-          }
-
           // add extraction components
           if (components != null && components.size() > 0) {
             extract.getComponents().addAll(components);
           }
-
           htmlExtractor.extract(extract);
         }
         catch (Exception e) {
