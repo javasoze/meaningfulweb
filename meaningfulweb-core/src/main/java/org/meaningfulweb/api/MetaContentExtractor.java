@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,6 +11,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.lang.StringUtils;
 import org.apache.tika.detect.Detector;
+import org.apache.tika.detect.TypeDetector;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;
@@ -19,14 +19,10 @@ import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
 import org.apache.tika.parser.html.HtmlParser;
-import org.apache.tika.parser.image.ImageFetcher;
-import org.apache.tika.parser.image.ImageFilter;
-import org.apache.tika.parser.image.ImageSelector;
 import org.apache.tika.parser.txt.TXTParser;
 import org.meaningfulweb.cext.Extract;
 import org.meaningfulweb.cext.HtmlContentProcessorFactory;
 import org.meaningfulweb.cext.HtmlExtractor;
-import org.meaningfulweb.detector.DetectorBuilder;
 import org.meaningfulweb.opengraph.OGObject;
 import org.meaningfulweb.util.http.HttpComponentsServiceImpl;
 import org.slf4j.Logger;
@@ -43,18 +39,13 @@ public class MetaContentExtractor {
 	private final TXTParser _txtParser;
 	private final HtmlParser _htmlParser;
 	
-	private final ImageFilter imageFilter = new ImageFilter(); 
-	
-	private final ImageFetcher imageFetcher = new ImageFetcher();
-	
-	private final ImageSelector imgSelector = new ImageSelector(imageFilter,imageFetcher);
 	
 	private final HtmlContentProcessorFactory processorFactory;
 	private final HtmlExtractor htmlExtractor;
 	private final HttpComponentsServiceImpl httpClientService = new HttpComponentsServiceImpl();
 	
 	public MetaContentExtractor(File configFile) throws Exception{
-	  _detector = DetectorBuilder.getInstance(null).buildDetector();
+	  _detector = new TypeDetector();
 	  _autoParser = new AutoDetectParser(_detector);
 	  _txtParser = new TXTParser();
 	  _htmlParser = new HtmlParser();

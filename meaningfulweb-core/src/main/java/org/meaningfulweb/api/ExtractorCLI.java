@@ -27,7 +27,8 @@ public class ExtractorCLI {
     // the config file and the url
     File configFile = new File("config/cextr.json");
     //String url = "http://twitpic.com/3sryl9";
-    String url = "http://www.youtube.com/watch?v=7rE0-ek6MZA&feature=topvideos";
+    //String url = "http://www.youtube.com/watch?v=7rE0-ek6MZA&feature=topvideos";
+    String url = "http://twitition.com/t9no2";
     HtmlContentProcessorFactory processorFactory = new HtmlContentProcessorFactory(
       configFile);
     HtmlExtractor htmlExtractor = new HtmlExtractor();
@@ -52,7 +53,8 @@ public class ExtractorCLI {
     //components.add("bestimage");
     components.add("opengraph");
     components.add("element");
-    //components.add("article");
+    components.add("article");
+    components.add("boilerpipe");
     
     //pipelines.add("metadata");
     //pipelines.add("content");

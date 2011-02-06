@@ -43,8 +43,6 @@
       </resource>
       <resource>
         <directory>src/main/resources</directory>
-        
-        <encoding>UTF-8</encoding>
       </resource>
     </resources>
     <extensions>

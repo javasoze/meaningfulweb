@@ -5,7 +5,6 @@ import java.io.InputStream;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.tika.detect.DefaultDetector;
 import org.apache.tika.detect.Detector;
 import org.apache.tika.detect.TypeDetector;
 import org.apache.tika.metadata.Metadata;
@@ -18,7 +17,7 @@ public class MeaningfulClient {
 	static Detector buildDetector(){
 		return new Detector(){
 			private Detector typeDetector = new TypeDetector();
-			private Detector defaultDetector = new DefaultDetector();
+			private Detector defaultDetector = typeDetector;
 			
 			@Override
 			public MediaType detect(InputStream input, Metadata metadata)

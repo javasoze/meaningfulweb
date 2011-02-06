@@ -10,7 +10,17 @@
     },
     {
       "name": "article",
-      "class": "org.meaningfulweb.cext.processors.ArticleProcessor"
+      "class": "org.meaningfulweb.cext.processors.ArticleProcessor",
+      "config": {
+         "extractMedia": false,          
+         "extractHtml": false
+       }
+    },
+    {
+      "name": "boilerpipe",
+      "class": "org.meaningfulweb.cext.processors.BoilerpipeArticleProcessor",
+      "config": {
+       }
     },
     {
       "name": "element",

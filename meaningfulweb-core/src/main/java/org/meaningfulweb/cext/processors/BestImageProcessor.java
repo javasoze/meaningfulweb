@@ -6,17 +6,17 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.tika.parser.image.ExtractedContents;
-import org.apache.tika.parser.image.ImageFetcher;
-import org.apache.tika.parser.image.ImageFilter;
-import org.apache.tika.parser.image.ImageInfo;
-import org.apache.tika.parser.image.ImageMeta;
-import org.apache.tika.parser.image.ImageSelector;
 import org.jdom.Attribute;
 import org.jdom.Content;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.meaningfulweb.cext.HtmlContentProcessor;
+import org.meaningfulweb.imgext.ExtractedContents;
+import org.meaningfulweb.imgext.ImageFetcher;
+import org.meaningfulweb.imgext.ImageFilter;
+import org.meaningfulweb.imgext.ImageInfo;
+import org.meaningfulweb.imgext.ImageMeta;
+import org.meaningfulweb.imgext.ImageSelector;
 import org.meaningfulweb.util.URLUtil;
 
 public class BestImageProcessor
