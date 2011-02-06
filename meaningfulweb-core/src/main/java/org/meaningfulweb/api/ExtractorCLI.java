@@ -41,24 +41,6 @@ public class ExtractorCLI {
     Map<String, Object> config = new HashMap<String, Object>();
     config.put("perComponentDOM", false);
     config.put("perPipelineDOM", true);
-    
-    
-    Map elementConfig = new HashMap();    
-    List<String> elementsList = new ArrayList<String>();
-    elementsList.add("title");
-    elementConfig.put("elements", elementsList);
-
-    List<String> headerList = new ArrayList<String>();
-    headerList.add("keywords");
-    headerList.add("description");
-    headerList.add("image");
-    elementConfig.put("headers", headerList);
-    elementConfig.put("extractHtml", false);
-    config.put("element", elementConfig);
-    
-    Map opengraphConfig = new HashMap(); 
-    opengraphConfig.put("includeAll", true);
-    config.put("opengraph", opengraphConfig);
 
     // create base metadata
     Map<String, Object> metadata = new HashMap<String, Object>();

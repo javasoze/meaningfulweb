@@ -14,7 +14,12 @@
     },
     {
       "name": "element",
-      "class": "org.meaningfulweb.cext.processors.ElementProcessor"
+      "class": "org.meaningfulweb.cext.processors.ElementProcessor",
+      "config": {
+         "elements": ["title"],
+         "headers": ["keywords", "description","image"],            
+         "extractHtml": false
+       }
     },
     {
       "name": "bestimage",
@@ -22,7 +27,10 @@
     }, 
     {
       "name": "opengraph",
-      "class": "org.meaningfulweb.cext.processors.OpengraphContentProcessor"
+      "class": "org.meaningfulweb.cext.processors.OpengraphContentProcessor",
+      "config":{
+        "includeAll":true
+      }
     }   
   ] 
 }
