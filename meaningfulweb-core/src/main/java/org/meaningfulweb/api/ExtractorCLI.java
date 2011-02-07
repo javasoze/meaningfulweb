@@ -1,6 +1,5 @@
 package org.meaningfulweb.api;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,12 +24,14 @@ public class ExtractorCLI {
     throws Exception {
 
     // the config file and the url
-    File configFile = new File("config/cextr.json");
+	String jsonConfig = "{\"components\": [{"+
+      "\"name\": \"meaningfulweb\","+
+      "\"class\": \"org.meaningfulweb.cext.processors.MeaningfulwebCompositeProcessor\"}]}";
+	
     //String url = "http://twitpic.com/3sryl9";
     //String url = "http://www.youtube.com/watch?v=7rE0-ek6MZA&feature=topvideos";
     String url = "http://twitition.com/t9no2";
-    HtmlContentProcessorFactory processorFactory = new HtmlContentProcessorFactory(
-      configFile);
+    HtmlContentProcessorFactory processorFactory = new HtmlContentProcessorFactory(jsonConfig);
     HtmlExtractor htmlExtractor = new HtmlExtractor();
     htmlExtractor.setProcessorFactory(processorFactory);
    
@@ -49,16 +50,8 @@ public class ExtractorCLI {
 
     // create the pipelines and components to run
     List<String> components = new ArrayList<String>();
-    //components.add("fullcontent");
-    //components.add("bestimage");
-    components.add("opengraph");
-    components.add("element");
-    components.add("article");
-    components.add("boilerpipe");
-    
-    //pipelines.add("metadata");
-    //pipelines.add("content");
-    
+
+    components.add("meaningfulweb");
 
     // get the html from the url
     long start = System.currentTimeMillis();

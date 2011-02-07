@@ -72,12 +72,22 @@ public class HtmlContentProcessorFactory {
   public HtmlContentProcessorFactory(Resource configRes) throws Exception{
 	  this(configRes.getFile());
   }
+  
 
   public HtmlContentProcessorFactory(File configFile)
     throws Exception {
+	  this(FileUtils.readFileToString(configFile));
+  }
+  
 
-    JsonNode root = JsonUtils.parseJson(FileUtils.readFileToString(configFile));
+  public HtmlContentProcessorFactory(String jsonString)
+    throws Exception {
 
+	 this(JsonUtils.parseJson(jsonString));
+  }
+
+  public HtmlContentProcessorFactory(JsonNode root)
+    throws Exception {
     JsonNode compNodes = root.get("components");
     if (compNodes != null) {
       for (JsonNode compNode : compNodes) {

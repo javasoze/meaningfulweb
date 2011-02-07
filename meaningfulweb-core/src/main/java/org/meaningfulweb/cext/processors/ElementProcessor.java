@@ -44,10 +44,10 @@ public class ElementProcessor
       // extract out elements by name
       if (elements.contains(name)) {
         if (extractHtml) {
-          addExtractedValue(name, XMLUtils.toHtml(elem));
+          addExtractedValue(name + ".html", XMLUtils.toHtml(elem));
         }
         if (extractText) {
-          addExtractedValue(name + ".text", XMLUtils.toText(elem));
+          addExtractedValue(name, XMLUtils.toText(elem));
         }
       }
       else if (name.equalsIgnoreCase("meta")) {

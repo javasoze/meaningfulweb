@@ -41,6 +41,13 @@
       "config":{
         "includeAll":true
       }
-    }   
+    },   
+    {
+      "name":"meaningfulweb",
+      "class":"org.meaningfulweb.cext.processors.MeaningfulwebCompositeProcessor",
+      "config":{
+
+      }
+    }
   ] 
 }
