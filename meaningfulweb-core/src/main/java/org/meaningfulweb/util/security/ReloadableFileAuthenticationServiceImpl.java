@@ -1,9 +1,10 @@
 package org.meaningfulweb.util.security;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -11,7 +12,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
 
 public class ReloadableFileAuthenticationServiceImpl
   implements AuthenticationService {
@@ -19,7 +19,7 @@ public class ReloadableFileAuthenticationServiceImpl
   private final static Logger LOG = LoggerFactory
     .getLogger(ReloadableFileAuthenticationServiceImpl.class);
 
-  private Resource authFile;
+  private File authFile;
   private long pollFrequencyInSeconds = 60;
   private Map<String, String> authMap = new ConcurrentHashMap<String, String>();
   private Thread reloaderThread;
@@ -35,7 +35,7 @@ public class ReloadableFileAuthenticationServiceImpl
       throws IOException {
 
       Map<String, String> newAuths = new HashMap<String, String>();
-      Scanner scanner = new Scanner(authFile.getFile());
+      Scanner scanner = new Scanner(authFile);
       while (scanner.hasNextLine()) {
         String line = scanner.nextLine();
         String[] loginApiKeys = StringUtils.split(line, "=");
@@ -70,7 +70,7 @@ public class ReloadableFileAuthenticationServiceImpl
             long currentMod = authFile.lastModified();
             if (currentMod > lastModified.get()) {
               LOG.info("Loading authentication keys file: "
-                + authFile.getFile().getPath());
+                + authFile.getPath());
               lastModified.set(currentMod);
               reloadAuthMap();
             }
@@ -78,7 +78,7 @@ public class ReloadableFileAuthenticationServiceImpl
           Thread.sleep(pollFrequencyInSeconds * 1000);
         }
         catch (Exception e) {
-          LOG.error("Error loading auth file: " + authFile.getFilename(), e);
+          LOG.error("Error loading auth file: " + authFile.getAbsolutePath(), e);
         }
       }
     }
@@ -100,7 +100,7 @@ public class ReloadableFileAuthenticationServiceImpl
     active.set(false);
   }
 
-  public void setAuthFile(Resource authFile) {
+  public void setAuthFile(File authFile) {
     this.authFile = authFile;
   }
 

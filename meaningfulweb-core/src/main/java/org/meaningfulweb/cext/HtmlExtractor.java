@@ -1,17 +1,13 @@
 package org.meaningfulweb.cext;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.BooleanUtils;
-import org.apache.tika.parser.txt.CharsetDetector;
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.JDomSerializer;
 import org.htmlcleaner.TagNode;
 import org.jdom.Document;
-import org.meaningfulweb.util.EncodingUtils;
-import org.meaningfulweb.util.XMLUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

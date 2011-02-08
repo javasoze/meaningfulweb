@@ -13,7 +13,6 @@ import org.codehaus.jackson.JsonNode;
 import org.meaningfulweb.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
 
 public class HtmlContentProcessorFactory {
 
@@ -69,10 +68,11 @@ public class HtmlContentProcessorFactory {
     }
   }
   
+  /*
   public HtmlContentProcessorFactory(Resource configRes) throws Exception{
 	  this(configRes.getFile());
   }
-  
+  */
 
   public HtmlContentProcessorFactory(File configFile)
     throws Exception {

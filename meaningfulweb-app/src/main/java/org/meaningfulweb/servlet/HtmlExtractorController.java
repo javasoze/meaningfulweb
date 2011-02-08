@@ -1,4 +1,4 @@
-package org.meaningfulweb.cext;
+package org.meaningfulweb.servlet;
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.meaningfulweb.cext.Extract;
+import org.meaningfulweb.cext.ExtractForm;
+import org.meaningfulweb.cext.HtmlExtractor;
 import org.meaningfulweb.util.http.HttpClientService;
 import org.meaningfulweb.util.http.HttpException;
 import org.slf4j.Logger;

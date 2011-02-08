@@ -43,6 +43,7 @@ import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
 import org.apache.tika.metadata.Metadata;
+import org.meaningfulweb.util.http.HttpComponentsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

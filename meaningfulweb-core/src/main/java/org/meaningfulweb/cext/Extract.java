@@ -1,7 +1,6 @@
 package org.meaningfulweb.cext;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -13,6 +12,8 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class Extract
   implements Serializable, Cloneable {
+
+  private static final long serialVersionUID = 1L;
 
   private Set<String> components = new HashSet<String>();
   private Set<String> pipelines = new HashSet<String>();
