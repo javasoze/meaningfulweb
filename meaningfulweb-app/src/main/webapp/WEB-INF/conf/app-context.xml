@@ -26,8 +26,12 @@
     <property name="processorFactory" ref="htmlContentProcessorFactory" />
   </bean>
 
+  <bean id="cextrFileFactoryBean" class="org.meaningfulweb.servlet.FileFactoryBean">
+    <property name="backing" value="/WEB-INF/conf/cextr.json" />
+  </bean>
+
   <bean name="htmlContentProcessorFactory" class="org.meaningfulweb.cext.HtmlContentProcessorFactory">
-    <constructor-arg><value>cextr.json</value></constructor-arg>
+    <constructor-arg><ref bean="cextrFileFactoryBean" /></constructor-arg>
   </bean>
   
 </beans>

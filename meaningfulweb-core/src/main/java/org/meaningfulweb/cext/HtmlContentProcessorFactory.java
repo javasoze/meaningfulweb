@@ -135,33 +135,20 @@ public class HtmlContentProcessorFactory {
     }
   }
 
-  public HtmlContentProcessorFactory(String configFilename)
+  public HtmlContentProcessorFactory(File configFile)
     throws Exception {
 
-    // get the context classload
-    ClassLoader cl = Thread.currentThread().getContextClassLoader();
-    if (cl == null) {
-
-      // try current classloader
-      cl = HtmlContentProcessorFactory.class.getClassLoader();
-      // fallback to system classloader
-      if (cl == null) {
-        cl = ClassLoader.getSystemClassLoader();
-      }
-      // if can't get any classloader, throw exception
-      if (cl == null) {
-        throw new NullPointerException(
-          "Classloader for HtmlContentProcessorFactory cannot be null");
-      }
+    String configSource = FileUtils.readFileToString(configFile);
+    if (StringUtils.isBlank(configSource)) {
+      throw new IllegalArgumentException("Configuration file cannot be empty.");
     }
 
-    // get an input stream for the classpath resource
-    InputStream configStream = cl.getResourceAsStream(configFilename);
-    if (configStream == null) {
-      throw new IOException("Cannot find configuration file: " + configFilename);
-    }
+    parseConfig(JsonUtils.parseJson(configSource));
+  }
 
-    String configSource = IOUtils.toString(configStream);
+  public HtmlContentProcessorFactory(String configSource)
+    throws Exception {
+
     if (StringUtils.isBlank(configSource)) {
       throw new IllegalArgumentException("Configuration file cannot be empty.");
     }
