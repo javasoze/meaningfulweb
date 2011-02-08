@@ -27,7 +27,7 @@
   </bean>
 
   <bean name="htmlContentProcessorFactory" class="org.meaningfulweb.cext.HtmlContentProcessorFactory">
-    <constructor-arg><value>/WEB-INF/conf/cextr.json</value></constructor-arg>
+    <constructor-arg><value>cextr.json</value></constructor-arg>
   </bean>
   
 </beans>

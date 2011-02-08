@@ -1,5 +1,10 @@
 package org.meaningfulweb.cext;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +13,7 @@ import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonNode;
 import org.meaningfulweb.util.JsonUtils;
@@ -24,69 +30,7 @@ public class HtmlContentProcessorFactory {
   Map<String, List<String>> configs = new HashMap<String, List<String>>();
   Map<String, List<String>> pipelines = new HashMap<String, List<String>>();
 
-  private void handleOverlay(String name, HtmlContentProcessor processor,
-    Object overlay) {
-
-    if (overlay != null) {
-      try {
-        if (overlay instanceof HtmlContentProcessor) {
-          HtmlContentProcessor overlayProc = (HtmlContentProcessor)overlay;
-          List<String> props = configs.get(name);
-          if (props != null && props.size() > 0) {
-            for (String prop : props) {
-              Object value = PropertyUtils.getProperty(overlayProc, prop);
-              try {
-                PropertyUtils.setProperty(processor, prop, value);
-              }
-              catch (Exception e) {
-                // log and continue setting properties, ignore invalid
-                LOG.error("ignoring invalid property: " + name + ":" + prop);
-              }
-            }
-          }
-        }
-        else {
-          Map<String, Object> overlayMap = (Map<String, Object>)overlay;
-          if (overlayMap != null && overlayMap.size() > 0) {
-            for (String prop : overlayMap.keySet()) {
-              Object value = overlayMap.get(prop);
-              try {
-                PropertyUtils.setProperty(processor, prop, value);
-              }
-              catch (Exception e) {
-                // log and continue setting properties, ignore invalid
-                LOG.error("ignoring invalid property: " + name + ":" + prop);
-              }
-            }
-          }
-        }
-      }
-      catch (Exception e) {
-        // just log the error, overlays are best completion instead of fail fast
-        LOG.error("Error processing overlay", e);
-      }
-    }
-  }
-  
-  /*
-  public HtmlContentProcessorFactory(Resource configRes) throws Exception{
-	  this(configRes.getFile());
-  }
-  */
-
-  public HtmlContentProcessorFactory(File configFile)
-    throws Exception {
-	  this(FileUtils.readFileToString(configFile));
-  }
-  
-
-  public HtmlContentProcessorFactory(String jsonString)
-    throws Exception {
-
-	 this(JsonUtils.parseJson(jsonString));
-  }
-
-  public HtmlContentProcessorFactory(JsonNode root)
+  private void parseConfig(JsonNode root)
     throws Exception {
     JsonNode compNodes = root.get("components");
     if (compNodes != null) {
@@ -145,6 +89,84 @@ public class HtmlContentProcessorFactory {
         pipelines.put(plName, pipeline);
       }
     }
+  }
+
+  private void handleOverlay(String name, HtmlContentProcessor processor,
+    Object overlay) {
+
+    if (overlay != null) {
+      try {
+        if (overlay instanceof HtmlContentProcessor) {
+          HtmlContentProcessor overlayProc = (HtmlContentProcessor)overlay;
+          List<String> props = configs.get(name);
+          if (props != null && props.size() > 0) {
+            for (String prop : props) {
+              Object value = PropertyUtils.getProperty(overlayProc, prop);
+              try {
+                PropertyUtils.setProperty(processor, prop, value);
+              }
+              catch (Exception e) {
+                // log and continue setting properties, ignore invalid
+                LOG.error("ignoring invalid property: " + name + ":" + prop);
+              }
+            }
+          }
+        }
+        else {
+          Map<String, Object> overlayMap = (Map<String, Object>)overlay;
+          if (overlayMap != null && overlayMap.size() > 0) {
+            for (String prop : overlayMap.keySet()) {
+              Object value = overlayMap.get(prop);
+              try {
+                PropertyUtils.setProperty(processor, prop, value);
+              }
+              catch (Exception e) {
+                // log and continue setting properties, ignore invalid
+                LOG.error("ignoring invalid property: " + name + ":" + prop);
+              }
+            }
+          }
+        }
+      }
+      catch (Exception e) {
+        // just log the error, overlays are best completion instead of fail fast
+        LOG.error("Error processing overlay", e);
+      }
+    }
+  }
+
+  public HtmlContentProcessorFactory(String configFilename)
+    throws Exception {
+
+    // get the context classload
+    ClassLoader cl = Thread.currentThread().getContextClassLoader();
+    if (cl == null) {
+
+      // try current classloader
+      cl = HtmlContentProcessorFactory.class.getClassLoader();
+      // fallback to system classloader
+      if (cl == null) {
+        cl = ClassLoader.getSystemClassLoader();
+      }
+      // if can't get any classloader, throw exception
+      if (cl == null) {
+        throw new NullPointerException(
+          "Classloader for HtmlContentProcessorFactory cannot be null");
+      }
+    }
+
+    // get an input stream for the classpath resource
+    InputStream configStream = cl.getResourceAsStream(configFilename);
+    if (configStream == null) {
+      throw new IOException("Cannot find configuration file: " + configFilename);
+    }
+
+    String configSource = IOUtils.toString(configStream);
+    if (StringUtils.isBlank(configSource)) {
+      throw new IllegalArgumentException("Configuration file cannot be empty.");
+    }
+
+    parseConfig(JsonUtils.parseJson(configSource));
   }
 
   public HtmlContentProcessor getComponent(String fullname,
