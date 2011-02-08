@@ -1,15 +1,16 @@
 package org.meaningfulweb.api;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.lang.StringUtils;
 import org.apache.tika.detect.Detector;
 import org.apache.tika.detect.TypeDetector;
 import org.apache.tika.exception.TikaException;
@@ -24,7 +25,6 @@ import org.meaningfulweb.cext.Extract;
 import org.meaningfulweb.cext.HtmlContentProcessorFactory;
 import org.meaningfulweb.cext.HtmlExtractor;
 import org.meaningfulweb.opengraph.OGObject;
-import org.meaningfulweb.util.http.HttpComponentsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -42,76 +42,54 @@ public class MetaContentExtractor {
 	
 	private final HtmlContentProcessorFactory processorFactory;
 	private final HtmlExtractor htmlExtractor;
-	private final HttpComponentsServiceImpl httpClientService = new HttpComponentsServiceImpl();
 	
-	public MetaContentExtractor(File configFile) throws Exception{
+	public MetaContentExtractor() throws Exception{
+	  
 	  _detector = new TypeDetector();
 	  _autoParser = new AutoDetectParser(_detector);
 	  _txtParser = new TXTParser();
 	  _htmlParser = new HtmlParser();
-	  processorFactory = new HtmlContentProcessorFactory(configFile);
+	// the config file and the url
+	  
+	  // TODO: should refactor here to take some sort of configuration object
+	  String jsonConfig = "{\"components\": [{"+
+	      "\"name\": \"meaningfulweb\","+
+	      "\"class\": \"org.meaningfulweb.cext.processors.MeaningfulwebCompositeProcessor\"}]}";
+	  processorFactory = new HtmlContentProcessorFactory(jsonConfig);
 	  htmlExtractor = new HtmlExtractor();
 	  htmlExtractor.setProcessorFactory(processorFactory);
-	  httpClientService.initialize();
 	}
 	
-	private Map doExtractFromHtml(String url,InputStream in,Set<String> components,
-			Set<String> pipelines,Map<String,Object> config,Map<String,Object> meta) throws Exception{
-			    // check for blank global hash
-	    if (StringUtils.isBlank(url)) {
-	      throw new IllegalArgumentException("url.required: Url is required and cannot be blank");
-	    }
-
-	    // check for no processors
-	    boolean hasComponents = (components != null && components.size() > 0);
-	    boolean hasPipelines = (pipelines != null && pipelines.size() > 0);
-	    if (!hasComponents && !hasPipelines) {
-	      throw new Exception("processors.requiredL "+
-	        "One or more components or pipelines must be specified to process "
-	          + "content");
-	    }
-
-	    // get the url content
-
-	    byte[] content;
-	    try {
-	      content = httpClientService.get(in);
-	    }
-	    catch (Exception e) {
-	      throw e;
-	    }
-
-	    // return an empty map if no content
-	    if (content == null || content.length == 0) {
-	      return new HashMap();
-	    }
-
-	    // process the content and return anything extracted
-	    return extractContent(content, pipelines, components,config,meta);
-	}
+	private Map<String,Object> extractHTMLContent(String url,InputStream in,String charset) {
 	
-	private Map extractContent(byte[] content, Set<String> pipelines,
-	  Set<String> components, Map<String, Object> config,
-	  Map<String, Object> metadata) {
-	
-	  Map output = new HashMap();
-	  if (content != null && content.length > 0) {
-	
-	      Extract extract = new Extract();
-	      extract.setPipelines(pipelines);
-	      extract.setComponents(components);
-	      extract.setConfig(config);
-	      extract.setContent(content);
-	      extract.setMetadata(metadata);
-	
-	      try {
-	        htmlExtractor.extract(extract);
-	        output = extract.getExtracted();
-	      }
-	      catch (Exception e) {
-	        logger.error("Error extracting content", e);
-	      }
-	  }
+	  // create base config
+	  Map<String, Object> config = new HashMap<String, Object>();
+	  config.put("perComponentDOM", false);
+	  config.put("perPipelineDOM", true);
+
+	    // create base metadata
+	  Map<String, Object> metadata = new HashMap<String, Object>();
+	  metadata.put("url", url);
+
+	  // create the pipelines and components to run
+	  List<String> components = new ArrayList<String>();
+
+	  components.add("meaningfulweb");
+	    
+	  Map<String,Object> output = new HashMap<String,Object>();
+      Extract extract = new Extract(in,charset);
+      extract.getComponents().addAll(components);
+      extract.setConfig(config);
+      extract.setMetadata(metadata);
+
+      try {
+        htmlExtractor.extract(extract);
+        output = extract.getExtracted();
+      }
+      catch (Exception e) {
+        logger.error("Error extracting content", e);
+      }
+	  
 	  return output;
 	}
 	
@@ -132,9 +110,10 @@ public class MetaContentExtractor {
 	  OGObject obj = new OGObject();
 	  Map<String,String> ogMeta = obj.getMeta();
 	  MediaType type = _detector.detect(in, meta);
+
+	  ogMeta.put("content-type",type.toString());
 	  if ("image".equals(type.getType())){
 		ogMeta.put("image", url);
-		ogMeta.put("type", "image");
 		ogMeta.put("title", url);
 		ogMeta.put("url", url);
 	  }
@@ -145,18 +124,19 @@ public class MetaContentExtractor {
 		}
 		else if ("html".equals(subtype)){
 
-		    Map<String,Object> metaMap = new HashMap<String,Object>();
-		    metaMap.put("url", url);
-		    Map<String,Object> config = new HashMap<String,Object>();
-			Map extracted = doExtractFromHtml(url,in,processorFactory.getComponentNames(),processorFactory.getPipelineNames(),config,metaMap);
+			Map<String,Object> extracted = extractHTMLContent(url,in,charset);
 			
 			// We now have a string of text from the the page.
-			//ogMeta.put("url", url);
-			ogMeta.put("title",(String)extracted.get("title"));
-			//ogMeta.put("description", desc);
-			ogMeta.put("image", (String)extracted.get("image"));
-			//System.out.println("extracted out: "+extracted);
+			ogMeta.put("url", url);
+			ogMeta.put("title",(String)extracted.get("meaningfulweb.title"));
+			ogMeta.put("description", (String)extracted.get("meaningfulweb.description"));
+			ogMeta.put("image", (String)extracted.get("meaningfulweb.image"));
+			ogMeta.put("content", (String)extracted.get("meaningfulweb.text"));
 			
+			Set<Entry<String,Object>> entries = extracted.entrySet();
+			for (Entry<String,Object> entry : entries){
+				ogMeta.put(entry.getKey(), String.valueOf(entry.getValue()));
+			}
 		}
 	  }
 	  else if ("application".equals(type.getType())){
@@ -170,8 +150,7 @@ public class MetaContentExtractor {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		File confFile = new File("config/cextr.json");
-		MetaContentExtractor extractor = new MetaContentExtractor(confFile);
+		MetaContentExtractor extractor = new MetaContentExtractor();
 		String url = "http://twitpic.com/3sryl9";
 		
         HttpClient httpClient = new HttpClient();

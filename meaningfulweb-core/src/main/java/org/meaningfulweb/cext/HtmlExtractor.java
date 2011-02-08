@@ -30,7 +30,7 @@ public class HtmlExtractor {
     throws Exception {
 
     // get the character set
-    byte[] content = extract.getContent();
+   /* byte[] content = extract.getContent();
     CharsetDetector charDetect = new CharsetDetector();
     charDetect.setText(content);
     String charSet = charDetect.detect().getName();
@@ -38,6 +38,7 @@ public class HtmlExtractor {
     // clean the content of invalid xml characters
     String unclean = EncodingUtils.getEncodedString(content, charSet);
     String contentStr = XMLUtils.stripNonValidXMLCharacters(unclean);
+    */
 
     // setup the cleaner
     HtmlCleaner cleaner = new HtmlCleaner();
@@ -55,7 +56,7 @@ public class HtmlExtractor {
     props.setAllowMultiWordAttributes(true);
 
     // clean the html and serialize it to jdom
-    TagNode nodes = cleaner.clean(contentStr);
+    TagNode nodes = cleaner.clean(extract.getContentStream(),extract.getCharset());
     ExtractUtils.cleanInvalidAttributes(nodes);
     Document doc;
     try {

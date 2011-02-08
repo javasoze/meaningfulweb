@@ -61,13 +61,14 @@ public class BestImageProcessor
           height = heightAttr.getValue();
         }
 
+        /*
         int widthVal = NumberUtils.toInt(width, -1);
         int heightVal = NumberUtils.toInt(height, -1);
         boolean hasWidth = (!removeImagesNoWidthHeight && widthVal == -1)
           || widthVal >= imageMinWidth;
         boolean hasHeight = (!removeImagesNoWidthHeight && heightVal == -1)
           || heightVal >= imageMinHeight;
-
+*/
         Attribute srcAttr = elem.getAttribute("src");
         String src = null;
         if (srcAttr != null) {
@@ -92,12 +93,12 @@ public class BestImageProcessor
           onclick = StringUtils.lowerCase(onclickAttr.getValue());
         }
 
-        if (hasWidth && hasHeight) {
+       // if (hasWidth && hasHeight) {
           String url = URLUtil.toAbsoluteURL(baseUrl, src);
           ImageMeta imgInfo = new ImageMeta(imgMetas.size(), alt, title, width,
             height, url, onclick);
           imgMetas.add(imgInfo);
-        }
+        //}
 
       }
 

@@ -1,4 +1,5 @@
 package org.meaningfulweb.cext;
+import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -55,11 +56,10 @@ public class HtmlExtractorController {
     Map output = new HashMap();
     if (content != null && content.length > 0) {
 
-      Extract extract = new Extract();
+      Extract extract = new Extract(new ByteArrayInputStream(content),"UTF-8");
       extract.setPipelines(pipelines);
       extract.setComponents(components);
       extract.setConfig(config);
-      extract.setContent(content);
       extract.setMetadata(metadata);
 
       try {

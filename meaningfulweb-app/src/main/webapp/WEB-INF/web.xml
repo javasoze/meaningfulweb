@@ -3,7 +3,7 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
   version="2.5">
-
+<!-- 
   <session-config>
     <session-timeout>30</session-timeout>
   </session-config>
@@ -39,7 +39,7 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
-
+ -->
   <servlet>
     <servlet-name>GetWebMeaningServlet</servlet-name>
     <servlet-class>org.meaningfulweb.servlet.MeaningfulWebServlet</servlet-class>
@@ -50,16 +50,17 @@
     <servlet-name>GetWebMeaningServlet</servlet-name>
     <url-pattern>/get-meaning/*</url-pattern>
   </servlet-mapping>
-
+<!-- 
   <servlet-mapping>
     <servlet-name>spring</servlet-name>
     <url-pattern>*.html</url-pattern>
   </servlet-mapping>
+   
   <servlet-mapping>
     <servlet-name>spring</servlet-name>
     <url-pattern>*.json</url-pattern>
   </servlet-mapping>
-
+-->
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>

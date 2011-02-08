@@ -1,5 +1,7 @@
 package org.meaningfulweb.cext;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,21 +16,23 @@ public class Extract
 
   private Set<String> components = new HashSet<String>();
   private Set<String> pipelines = new HashSet<String>();
-  private byte[] content;
+  private final InputStream _contentStream;
+  private final String _charset;
   private Map<String, Object> config = new LinkedHashMap<String, Object>();
   private Map<String, Object> metadata = new LinkedHashMap<String, Object>();
   private Map<String, Object> extracted = new LinkedHashMap<String, Object>();
 
-  public Extract() {
-
+  public Extract(InputStream contentStream,String charset) {
+    _contentStream = contentStream;
+    _charset = charset;
   }
-
-  public byte[] getContent() {
-    return content;
+  
+  public InputStream getContentStream(){
+	  return _contentStream;
   }
-
-  public void setContent(byte[] content) {
-    this.content = content;
+  
+  public String getCharset(){
+	  return _charset;
   }
 
   public Set<String> getComponents() {
