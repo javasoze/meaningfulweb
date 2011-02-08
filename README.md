@@ -19,12 +19,12 @@ Build and release are managed via Maven: http://maven.apache.org/
 3. build core: under meaningfulweb-core/, do: mvn install
 4. start webapp: under meaningfulweb-app/, do: mvn jetty:run
 
-application should be running at: http://localhost:8080/meaningfulweb-app/
+application should be running at: http://localhost:8080/
 
-the rest service should be running at: http://localhost:8080/meaningfulweb-app/get-meaning?url=xxx
+the rest service should be running at: http://localhost:8080/get-meaning?url=xxx
 
 Example:
 
-http://localhost:8080/meaningfulweb-app/get-meaning?url=http://www.google.com
+http://localhost:8080/get-meaning?url=http://www.google.com
 
 
