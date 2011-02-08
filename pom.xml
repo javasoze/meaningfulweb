@@ -34,6 +34,14 @@
   <name>Meaningful Web</name>
   <url>http://www.meaningfulweb.org</url>
 
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
   <scm>
     <connection>
       scm:git://github.com/javasoze/meaningfulweb.git
@@ -43,6 +51,24 @@
     </developerConnection>
     <url>https://github.com/javasoze/meaningfulweb</url>
   </scm>
+
+  <developers>
+    <developer>
+      <id>javasoze</id>
+      <name>John Wang</name>
+      <email>john.wang@gmail.com</email>
+    </developer>
+    <developer>
+      <id>kubes</id>
+      <name>Dennis Kubes</name>
+      <email>dennis@igfoo.com</email>
+    </developer>
+    <developer>
+      <id>wonlay</id>
+      <name>Lei Wang</name>
+      <email>wonlay@gmail.com</email>
+    </developer>
+  </developers>
 
   <modules>
     <module>meaningfulweb-parent</module>
@@ -56,9 +82,26 @@
       <plugin>
         <artifactId>maven-deploy-plugin</artifactId>
         <configuration>
-          <skip>true</skip> <!-- No need to deploy the reactor -->
+          <skip>true</skip> 
         </configuration>
       </plugin>
     </plugins>
   </build>
+
+  <distributionManagement>
+   <snapshotRepository>
+    <id>ossMeaningfulweb</id>
+    <name>MeaningfulWeb repo</name>
+    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+  </snapshotRepository>
+
+<!--
+  <repository>
+    <id>nexusMeaningfulWebRelease</id>
+    <name>Nexus staging Repo</name>
+    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+  </repository>
+-->
+  </distributionManagement>
+
 </project>
