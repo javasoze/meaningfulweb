@@ -1,0 +1,106 @@
+body {
+  margin-top: 0;
+  font-family: arial, serif;
+}
+
+#header {
+  text-align: center;
+  background: #efefef;
+}
+
+div.bar {
+  height: 43px;
+  width: 788;
+  text-align: center;
+  background: black;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+div.bar div.hatecss {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  width: 788px;
+  height: 43px;
+  /* border: 1px solid red; */
+  margin: 0;
+  font-weight: bold;
+  font-size: 18px;
+  color: #fff;
+  font-family: 'Droid Sans', arial, serif;
+  text-transform: uppercase; 
+}
+
+div.bar div.hatecss a {
+  color: #fff;
+  margin-left: 0.4em;
+  margin-right: 0.4em;
+}
+
+div.content {
+  width: 788px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  line-height: 140%;
+}
+
+#props {
+  margin-top:1em;
+  text-align: center;
+  font-size: 75%;
+}
+
+table.status {
+  border: 2px solid black;
+  width: 100%;
+}
+
+table.status td {
+  border: 1px solid #999;
+  padding: 0.4em;
+}
+
+table.status th {
+  border: 1px solid black;
+  padding: 0.4em;
+}
+
+dl.terms dt {
+  margin-top: 0.5em;
+  font-weight: bold;
+  font-style: italic;
+}
+
+ul.lispaced li {
+      margin-top: 0.8em;
+}
+
+tt {
+    color: #e84c00;
+    font-weight: bold;
+}
+
+pre.sty {
+    padding-left: 1em;
+    border-left: 2px solid #e84c00;
+    background: #e8b9a2;
+}
+
+a.local {
+    text-underline: dotted-underline;  /* TODO: i forget. look this up */
+}
+
+span.termhashlink {
+    font-weight: normal;
+    font-size: small;
+    color: #e84c00;
+}
+
+span.termhashlink a {
+    color: #e84c00;
+}
