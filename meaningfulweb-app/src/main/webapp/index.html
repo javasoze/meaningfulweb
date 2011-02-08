@@ -3,17 +3,19 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<script src="http://code.jquery.com/jquery-1.4.4.js"></script>
 	<script src="scripts/meaningfulwebapp.js"></script>
+	<link rel="stylesheet" type="text/css" href="meaningfulwebapp.css" />
 	<script type="text/javascript">
 	// <![CDATA[
 	var r = null;
 	$(function() {
 		$('#doExtract').click(function(e) {
 			var div = $('#extractionResult').empty();
-			div.append('<h3><i>Working ... </i></h3>');
+			div.append('<h3 align="center"><i>Working ... </i></h3>');
 			doExtract($('#url').val(), function (data){
 				r = data;
 				var div = $('#extractionResult').empty();
-				var table = div.append('<table border="1"></table>').find('table:last');
+				var table = div.append('<table cellpadding="5" cellspacing="1"></table>').find('table:last');
+				table.append('<tr><th>name</th><th>value</th></tr>');
 				if (data['image']) {
 					var tr = table.append('<tr></tr>').find('tr:last');
 					var img = null;
@@ -21,14 +23,12 @@
 						img = tr.append('<td>image</td>')
 							.append('<td><a></a></td>').find('a:last')
 							.attr('href', data['url'])
-							.append('<img />').find('img:last')
-							.attr('src', data['image'])
+							.append('<img src="'+data['image']+'" />').find('img:last')
 					}
 					else {
 						img = tr.append('<td>Image</td>')
 							.append('<td></td>').find('td:last')
-							.append('<img />').find('img:last')
-							.attr('src', data['image'])
+							.append('<img src="'+data['image']+'" />').find('img:last')
 					}
 					if (data['title']) {
 						img.attr('alt', data['title']);
@@ -62,8 +62,8 @@
 		<p align="center">
 		Enter url: <input id="url" type="text" />
 		<input type="button" id="doExtract" value="extract content" /><br/>
-	</p>
-	<div id="extractionResult">
-	</div>
+		</p>
+		<div id="extractionResult">
+		</div>
 	</body>
 </html>

@@ -1,0 +1,20 @@
+#extractionResult {
+	width: 100%;
+}
+
+#extractionResult table {
+	margin: auto;
+	background: #BBCCFF;
+}
+
+#extractionResult th {
+	background: #CCCCFF;
+}
+
+#extractionResult td {
+	background: #FFFFFF;
+}
+#extractionResult img{
+	border: none;
+}
+
