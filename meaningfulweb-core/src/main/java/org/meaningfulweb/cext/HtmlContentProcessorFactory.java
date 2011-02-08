@@ -146,14 +146,9 @@ public class HtmlContentProcessorFactory {
     parseConfig(JsonUtils.parseJson(configSource));
   }
 
-  public HtmlContentProcessorFactory(String configSource)
+  public HtmlContentProcessorFactory(String jsonString)
     throws Exception {
-
-    if (StringUtils.isBlank(configSource)) {
-      throw new IllegalArgumentException("Configuration file cannot be empty.");
-    }
-
-    parseConfig(JsonUtils.parseJson(configSource));
+    parseConfig(JsonUtils.parseJson(jsonString));
   }
 
   public HtmlContentProcessor getComponent(String fullname,
