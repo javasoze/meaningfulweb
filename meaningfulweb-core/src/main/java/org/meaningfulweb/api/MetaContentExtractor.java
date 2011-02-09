@@ -11,21 +11,22 @@ import java.util.Map.Entry;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+
 import org.apache.tika.detect.Detector;
-import org.apache.tika.detect.TypeDetector;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
-import org.apache.tika.parser.html.HtmlParser;
 import org.apache.tika.parser.txt.TXTParser;
 import org.meaningfulweb.cext.Extract;
 import org.meaningfulweb.cext.HtmlContentProcessorFactory;
 import org.meaningfulweb.cext.HtmlExtractor;
+import org.meaningfulweb.detector.DetectorFactory;
 import org.meaningfulweb.opengraph.OGObject;
 import org.meaningfulweb.util.ImageUtil;
+import org.meaningfulweb.util.URLUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -38,7 +39,6 @@ public class MetaContentExtractor {
 	private final Detector _detector;
 	private final Parser _autoParser;
 	private final TXTParser _txtParser;
-	private final HtmlParser _htmlParser;
 	
 	
 	private final HtmlContentProcessorFactory processorFactory;
@@ -46,10 +46,9 @@ public class MetaContentExtractor {
 	
 	public MetaContentExtractor() throws Exception{
 	  
-	  _detector = new TypeDetector();
+	  _detector = DetectorFactory.getInstance().buildDetector();
 	  _autoParser = new AutoDetectParser(_detector);
 	  _txtParser = new TXTParser();
-	  _htmlParser = new HtmlParser();
 	// the config file and the url
 	  
 	  // TODO: should refactor here to take some sort of configuration object
@@ -112,6 +111,10 @@ public class MetaContentExtractor {
 	  Map<String,String> ogMeta = obj.getMeta();
 	  MediaType type = _detector.detect(in, meta);
 
+	  String domain =  URLUtil.extractDomainFromUrl(url);
+	  if (domain!=null){
+	    ogMeta.put("domain",domain);
+	  }
 	  ogMeta.put("content-type",type.toString());
 	  if ("image".equals(type.getType())){
 		ogMeta.put("image", url);

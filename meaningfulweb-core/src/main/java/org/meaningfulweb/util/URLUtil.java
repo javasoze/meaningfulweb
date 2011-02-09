@@ -2,6 +2,7 @@ package org.meaningfulweb.util;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
@@ -10,6 +11,61 @@ import org.meaningfulweb.util.domain.DomainSuffixes;
 
 /** Utility class for URL analysis */
 public class URLUtil {
+	
+	 private final static String           TOP_LEVEL_DOMAINS =
+		    "((?i)aero|asia|biz|cat|com|coop|edu|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|" +
+		    "[a-z]{2})";
+	  private final static String           URL_HTTP = "(ht|f)tp(s?)\\:\\/\\/";
+	  
+	  
+	  private final static String           URL_REGEX_STRING_POST = 
+	      // example               (group #)
+	     "([\\w]+:\\w+@)?" +                             // username:password@    (4)
+	     "(" +
+	     "((www\\.)?" +                                // www.                  (7)
+	     "(([a-zA-Z0-9][\\w\\-]*\\.)+" +             // ddrfreak.             (8)
+	     TOP_LEVEL_DOMAINS + "))" +                  // com                   (8)(9)
+	     "|" +
+	     "((\\d{1,3})(\\.\\d{1,3}){3})" +              // 64.71.156.35
+	     ")" +                                           
+	     "(:[\\d]{1,5})?" +                              // :80
+	     "(" +  // optional                              //                       (15)
+
+	     "(" +  // any directory or filename block, if present, must start with "/"
+	     "(/+)" +                                    // /
+	     "([\\S&&[^</\"]]+/+)*" +                    // locations/
+	     "([\\S&&[^</\"]]*" +                            
+	     "([\\S&&[^</\".,;:!>'\\])\\?]])" +        // locations
+	     "(\\.[\\w]{3,4})?" +                      // .php
+	     ")?" +
+	     ")?" +
+
+	     "(" +
+	     "(\\?\\w+(=[%\\w]+)?)" +                    // ?action=displayLocation
+	     "(&\\w+(=\\w+)?)*" +                        // &locationID=265
+	     ")?" +
+	     ")?";
+	  
+	  private final static Pattern          URL_INCOMPLETE_REGEX = 
+		    Pattern.compile("(" + URL_HTTP + ")?" +             // http:// (optional)
+		                    URL_REGEX_STRING_POST);
+	  
+	  public final static int DOMAIN_NAME = 8;
+	  
+	  public static String extractDomainFromUrl(String url)
+	  {
+	    if (url==null || url.length() == 0) return null;
+	    Matcher matcher = URL_INCOMPLETE_REGEX.matcher(url);
+	    if(matcher == null) return null;
+	    if (matcher.matches())
+	    {
+	      String group = matcher.group(DOMAIN_NAME);
+	      if (group == null)
+	        return null;
+	      return group.trim().toLowerCase();
+	    }
+	      return null;
+	    }
 
   private static Pattern IP_PATTERN = Pattern
     .compile("(\\d{1,3}\\.){3}(\\d{1,3})");
