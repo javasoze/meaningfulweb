@@ -2,6 +2,8 @@ package org.meaningfulweb.servlet;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URL;
+import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Set;
@@ -18,7 +20,6 @@ import org.apache.tika.metadata.Metadata;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.meaningfulweb.api.MetaContentExtractor;
-
 import org.meaningfulweb.opengraph.OGObject;
 
 public class MeaningfulWebServlet extends HttpServlet {
@@ -31,6 +32,13 @@ public class MeaningfulWebServlet extends HttpServlet {
 	                        throws ServletException, IOException {
 	  try {
 		String url = req.getParameter("url");
+		try{
+			URL urlObj = new URL(url);
+			url = urlObj.toExternalForm();
+		}
+		catch(MalformedURLException me){
+			url="http://"+url;
+		}
 		JSONObject resObj = extractContent(url);
         resp.setContentType("text/plain; charset=utf-8");
 		resp.setCharacterEncoding("UTF-8");

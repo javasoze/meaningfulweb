@@ -25,6 +25,7 @@ import org.meaningfulweb.cext.Extract;
 import org.meaningfulweb.cext.HtmlContentProcessorFactory;
 import org.meaningfulweb.cext.HtmlExtractor;
 import org.meaningfulweb.opengraph.OGObject;
+import org.meaningfulweb.util.ImageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -117,6 +118,11 @@ public class MetaContentExtractor {
 		ogMeta.put("title", url);
 		ogMeta.put("url", url);
 	  }
+	  else if ("video".equals(type.getType())){
+		ogMeta.put("image", ImageUtil.getVideoImage());
+		ogMeta.put("title", url);
+		ogMeta.put("url", url);
+	  }
 	  else if ("text".equals(type.getType())){
 		ogMeta.put("type", "text");
 		String subtype = type.getSubtype();
@@ -142,6 +148,27 @@ public class MetaContentExtractor {
 	  }
 	  else if ("application".equals(type.getType())){
 		parseMeta(_autoParser,in,meta,ogMeta);
+		String subType = type.getSubtype();
+		String imgUrl=null;
+		if (subType.contains("pdf")){
+			imgUrl = ImageUtil.getPDFImage();
+		}
+		else if (subType.contains("ps") || subType.contains("postscript")){
+			imgUrl = ImageUtil.getPSImage();
+		}
+		else if (subType.contains("word") || subType.contains("doc")){
+			imgUrl = ImageUtil.getWordImage();
+		}
+		else if (subType.contains("excel") || subType.contains("xsl")){
+			imgUrl = ImageUtil.getExcelImage();
+		}
+		else if (subType.contains("powerpoint") || subType.contains("ppt")){
+			imgUrl = ImageUtil.getPowerpointImage();
+		}
+		
+		if (imgUrl!=null){
+			ogMeta.put("image",imgUrl);
+		}
 	  }
 	  else{
 		  logger.error("unable to handle media type: "+type);
