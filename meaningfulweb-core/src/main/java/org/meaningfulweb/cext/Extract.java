@@ -17,23 +17,17 @@ public class Extract
 
   private Set<String> components = new HashSet<String>();
   private Set<String> pipelines = new HashSet<String>();
-  private final InputStream _contentStream;
-  private final String _charset;
+  private final byte[] _content;
   private Map<String, Object> config = new LinkedHashMap<String, Object>();
   private Map<String, Object> metadata = new LinkedHashMap<String, Object>();
   private Map<String, Object> extracted = new LinkedHashMap<String, Object>();
 
-  public Extract(InputStream contentStream,String charset) {
-    _contentStream = contentStream;
-    _charset = charset;
+  public Extract(byte[] content) {
+	  _content = content;
   }
   
-  public InputStream getContentStream(){
-	  return _contentStream;
-  }
-  
-  public String getCharset(){
-	  return _charset;
+  public byte[] getContent(){
+	  return _content;
   }
 
   public Set<String> getComponents() {

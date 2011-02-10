@@ -3,11 +3,14 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.BooleanUtils;
+import org.apache.tika.parser.txt.CharsetDetector;
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.JDomSerializer;
 import org.htmlcleaner.TagNode;
 import org.jdom.Document;
+import org.meaningfulweb.util.EncodingUtils;
+import org.meaningfulweb.util.XMLUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +29,7 @@ public class HtmlExtractor {
     throws Exception {
 
     // get the character set
-   /* byte[] content = extract.getContent();
+    byte[] content = extract.getContent();
     CharsetDetector charDetect = new CharsetDetector();
     charDetect.setText(content);
     String charSet = charDetect.detect().getName();
@@ -34,8 +37,7 @@ public class HtmlExtractor {
     // clean the content of invalid xml characters
     String unclean = EncodingUtils.getEncodedString(content, charSet);
     String contentStr = XMLUtils.stripNonValidXMLCharacters(unclean);
-    */
-
+    
     // setup the cleaner
     HtmlCleaner cleaner = new HtmlCleaner();
     CleanerProperties props = cleaner.getProperties();
@@ -52,7 +54,7 @@ public class HtmlExtractor {
     props.setAllowMultiWordAttributes(true);
 
     // clean the html and serialize it to jdom
-    TagNode nodes = cleaner.clean(extract.getContentStream(),extract.getCharset());
+    TagNode nodes = cleaner.clean(contentStr);
     ExtractUtils.cleanInvalidAttributes(nodes);
     Document doc;
     try {

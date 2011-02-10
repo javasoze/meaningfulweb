@@ -1,5 +1,6 @@
 package org.meaningfulweb.api;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -9,8 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -21,6 +20,7 @@ import org.apache.tika.mime.MediaType;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
+import org.apache.tika.parser.txt.CharsetDetector;
 import org.apache.tika.parser.txt.TXTParser;
 import org.meaningfulweb.cext.Extract;
 import org.meaningfulweb.cext.HtmlContentProcessorFactory;
@@ -66,7 +66,7 @@ public class MetaContentExtractor {
 	  htmlExtractor.setProcessorFactory(processorFactory);
 	}
 	
-	private Map<String,Object> extractHTMLContent(String url,InputStream in,String charset) {
+	private Map<String,Object> extractHTMLContent(String url,InputStream in) throws Exception{
 	
 	  // create base config
 	  Map<String, Object> config = new HashMap<String, Object>();
@@ -83,7 +83,14 @@ public class MetaContentExtractor {
 	  components.add("meaningfulweb");
 	    
 	  Map<String,Object> output = new HashMap<String,Object>();
-      Extract extract = new Extract(in,charset);
+	  
+	  ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      byte[] contentBytes;
+	    
+	  IOUtils.copy(in, baos);
+	  contentBytes = baos.toByteArray();
+	      
+      Extract extract = new Extract(contentBytes);
       extract.getComponents().addAll(components);
       extract.setConfig(config);
       extract.setMetadata(metadata);
@@ -112,7 +119,7 @@ public class MetaContentExtractor {
 	  }
 	}
 	
-	public OGObject extract(String url,InputStream in,Metadata meta,String charset) throws Exception{
+	public OGObject extract(String url,InputStream in,Metadata meta) throws Exception{
 	  OGObject obj = new OGObject();
 	  Map<String,String> ogMeta = obj.getMeta();
 	  MediaType type = _detector.detect(in, meta);
@@ -140,7 +147,7 @@ public class MetaContentExtractor {
 		}
 		else if ("html".equals(subtype)){
 
-			Map<String,Object> extracted = extractHTMLContent(url,in,charset);
+			Map<String,Object> extracted = extractHTMLContent(url,in);
 			
 			// We now have a string of text from the the page.
 			ogMeta.put("url", url);
@@ -210,7 +217,7 @@ public class MetaContentExtractor {
 		   InputStream is = null;
 		   try{
 			 is = entity.getContent();
-		     obj = extract(url, is, metadata,entity.getContentEncoding().getValue());
+		     obj = extract(url, is, metadata);
 		   }
 		   catch(Exception e){
 			 logger.error(e.getMessage(),e);

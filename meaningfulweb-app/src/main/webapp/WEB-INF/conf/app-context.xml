@@ -9,18 +9,8 @@
      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
      http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-  <bean name="httpClientService" class="org.meaningfulweb.util.http.HttpComponentsServiceImpl"
-    init-method="initialize" destroy-method="shutdown">
-    <property name="userAgent" value="${user.agent}" />
-    <property name="connectionsPerHost" value="${http.connections.per.host}" />
-    <property name="connectionsTotal" value="${http.connections.total}" />
-    <property name="connectionTimeoutInSeconds" value="${http.connections.timeout.seconds}" />
-    <property name="socketTimeoutInSeconds" value="${http.socket.timeout.seconds}" />
-    <property name="tcpNoDelay" value="${http.tcp.nodelay}" />
-    <property name="soLingerInSeconds" value="${http.solinger.seconds}" />
-    <property name="idleConnectionTimeoutInSeconds" value="${http.idle.connection.timeout.seconds}" />
-    <property name="cullInterval" value="${http.cull.interval}" />
-  </bean>
+  <bean name="httpClientService" class="org.meaningfulweb.util.http.HttpClientFactory"
+    factory-method="getHttpClientService" />
   
   <bean name="htmlExtractor" class="org.meaningfulweb.cext.HtmlExtractor">
     <property name="processorFactory" ref="htmlContentProcessorFactory" />
