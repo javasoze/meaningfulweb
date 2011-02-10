@@ -25,7 +25,6 @@ import org.meaningfulweb.opengraph.OGObject;
 public class MeaningfulWebServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static Charset utf8 = Charset.forName("UTF-8");
-	private HttpClient httpClient = new HttpClient();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -69,36 +68,22 @@ public class MeaningfulWebServlet extends HttpServlet {
 	}
 	
 	private JSONObject extractContent(String url) throws Exception{
-		GetMethod get = null;
 		JSONObject resObj = new JSONObject();
-		try{
-			MetaContentExtractor extractor = new MetaContentExtractor();
-			get = new GetMethod(url);
-			httpClient.executeMethod(get);
+		MetaContentExtractor extractor = new MetaContentExtractor();
+		OGObject obj = extractor.extractFromUrl(url);
 			
-			Metadata metadata = new Metadata();
-			metadata.add(Metadata.RESOURCE_NAME_KEY, url);
-			metadata.add(Metadata.CONTENT_TYPE, get.getResponseHeader(Metadata.CONTENT_TYPE).getValue());
-			OGObject obj = extractor.extract(url, get.getResponseBodyAsStream(), metadata,get.getResponseCharSet());
+		resObj = convert(obj.getMeta(),resObj);
 			
-			resObj = convert(obj.getMeta(),resObj);
-			
-			Map<String,String> audioMap = obj.getAudio();
-			if (audioMap!=null && audioMap.size()>0){
-				resObj.put("audio",convert(audioMap,null));
-			}
-
-			Map<String,String> videoMap = obj.getVideo();
-			if (videoMap!=null && videoMap.size()>0){
-				resObj.put("video",convert(videoMap,null));
-			}
-
-			return resObj;
+		Map<String,String> audioMap = obj.getAudio();
+		if (audioMap!=null && audioMap.size()>0){
+			resObj.put("audio",convert(audioMap,null));
 		}
-		finally{
-			if (get!=null){
-				get.releaseConnection();
-			}
+
+		Map<String,String> videoMap = obj.getVideo();
+		if (videoMap!=null && videoMap.size()>0){
+			resObj.put("video",convert(videoMap,null));
 		}
+
+        return resObj;	
 	}
 }

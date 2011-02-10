@@ -59,7 +59,7 @@ public class HtmlExtractorController {
     Map output = new HashMap();
     if (content != null && content.length > 0) {
 
-      Extract extract = new Extract(new ByteArrayInputStream(content),"UTF-8");
+      Extract extract = new Extract(content);
       extract.setPipelines(pipelines);
       extract.setComponents(components);
       extract.setConfig(config);
