@@ -11,7 +11,9 @@ import java.util.Map.Entry;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
-
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.tika.detect.Detector;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
@@ -26,7 +28,11 @@ import org.meaningfulweb.cext.HtmlExtractor;
 import org.meaningfulweb.detector.DetectorFactory;
 import org.meaningfulweb.opengraph.OGObject;
 import org.meaningfulweb.util.ImageUtil;
+import org.meaningfulweb.util.URIUtils;
 import org.meaningfulweb.util.URLUtil;
+import org.meaningfulweb.util.http.HttpClientFactory;
+import org.meaningfulweb.util.http.HttpClientService;
+import org.meaningfulweb.util.http.HttpException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -180,22 +186,53 @@ public class MetaContentExtractor {
 	  return obj;
 	}
 	
+	public OGObject extractFromUrl(String url){
+		HttpClientService httpClient = HttpClientFactory.getHttpClientService();
+		
+		HttpGet httpget = null;
+
+		 // if the uri is invalid try and clean it up a little before fetching
+		 boolean isValidURI = URIUtils.isValidURI(url);
+		 if (!isValidURI) {
+		    String fixed = URIUtils.fixInvalidUri(url);
+		    logger.info("Fixed invalid URI: " + url + " to " + fixed);
+		    url = fixed;
+		 }
+
+		 httpget = new HttpGet(url);
+		 OGObject obj = new OGObject();
+		 try{
+		   HttpEntity entity = httpClient.doGet(httpget);
+		   
+		   Metadata metadata = new Metadata();
+		   metadata.add(Metadata.RESOURCE_NAME_KEY, url);
+		   metadata.add(Metadata.CONTENT_TYPE,entity.getContentType().getValue());
+		   InputStream is = null;
+		   try{
+			 is = entity.getContent();
+		     obj = extract(url, is, metadata,entity.getContentEncoding().getValue());
+		   }
+		   catch(Exception e){
+			 logger.error(e.getMessage(),e);
+		   }
+		   finally{
+			 if (is!=null){
+			   IOUtils.closeQuietly(is);
+			 }
+		   }
+			
+		 }
+		 catch(HttpException e){
+		   httpget.abort();
+		 }
+		 return obj;
+	}
+	
 	public static void main(String[] args) throws Exception{
 		MetaContentExtractor extractor = new MetaContentExtractor();
 		String url = "http://twitpic.com/3sryl9";
 		
-        HttpClient httpClient = new HttpClient();
-		
-		GetMethod get = new GetMethod(url);
-		
-		httpClient.executeMethod(get);
-		
-		Metadata metadata = new Metadata();
-		metadata.add(Metadata.RESOURCE_NAME_KEY, url);
-		metadata.add(Metadata.CONTENT_TYPE, get.getResponseHeader(Metadata.CONTENT_TYPE).getValue());
-		OGObject obj = extractor.extract(url, get.getResponseBodyAsStream(), metadata,get.getResponseCharSet());
-		
-		get.releaseConnection();
+        OGObject obj = extractor.extractFromUrl(url);
 		
 		System.out.println(obj);
 	}

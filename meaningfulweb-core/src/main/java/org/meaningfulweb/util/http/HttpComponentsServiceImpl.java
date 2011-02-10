@@ -201,8 +201,38 @@ public class HttpComponentsServiceImpl
       IOUtils.closeQuietly(baos);
     }
   }
+  
 
   public byte[] get(String url)
+    throws HttpException {
+	 HttpGet httpget = null;
+
+	 // if the uri is invalid try and clean it up a little before fetching
+	 boolean isValidURI = URIUtils.isValidURI(url);
+	 if (!isValidURI) {
+	    String fixed = URIUtils.fixInvalidUri(url);
+	    LOG.info("Fixed invalid URI: " + url + " to " + fixed);
+	    url = fixed;
+	 }
+
+	 httpget = new HttpGet(url);
+	  
+	 HttpEntity entity = doGet(httpget);
+	 if (entity != null) {
+		try{
+	      InputStream is = entity.getContent();
+	      return get(is);
+		}
+	    catch (Exception e) {
+	      LOG.error("Error getting url: " + url, e);
+	      httpget.abort();
+	      throw new HttpException(e);
+	    }
+	 }
+	 return null;
+  }
+  
+  public HttpEntity doGet(HttpGet httpget)
     throws HttpException {
 
     // return immediately if we are shutting down and no longer active
@@ -210,19 +240,7 @@ public class HttpComponentsServiceImpl
       return null;
     }
 
-    HttpGet httpget = null;
-
     try {
-
-      // if the uri is invalid try and clean it up a little before fetching
-      boolean isValidURI = URIUtils.isValidURI(url);
-      if (!isValidURI) {
-        String fixed = URIUtils.fixInvalidUri(url);
-        LOG.info("Fixed invalid URI: " + url + " to " + fixed);
-        url = fixed;
-      }
-
-      httpget = new HttpGet(url);
       HttpResponse response = httpClient.execute(httpget);
       HttpEntity entity = response.getEntity();
       StatusLine status = response.getStatusLine();
@@ -235,20 +253,13 @@ public class HttpComponentsServiceImpl
         }
         throw new HttpException(statusCode, status.getReasonPhrase());
       }
-
-      if (entity != null) {
-        InputStream is = null;
-        is = entity.getContent();
-        return get(is);
-      }
-
-      return null;
+      return entity;
     }
     catch (HttpException he) {
       throw he;
     }
     catch (Exception e) {
-      LOG.error("Error getting url: " + url, e);
+      LOG.error("Error getting url: " + httpget.getURI(), e);
       httpget.abort();
       throw new HttpException(e);
     }

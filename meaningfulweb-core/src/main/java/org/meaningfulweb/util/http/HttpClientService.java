@@ -3,6 +3,9 @@ package org.meaningfulweb.util.http;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.HttpGet;
+
 public interface HttpClientService {
 
   public byte[] get(String url)
@@ -11,6 +14,8 @@ public interface HttpClientService {
   public byte[] get(InputStream in) throws IOException;
 
   public boolean ping(String url);
+  
+  public HttpEntity doGet(HttpGet httpget) throws HttpException;
 
   public byte[] postAsBody(String url, String body, String mimeType,
     String encoding)
