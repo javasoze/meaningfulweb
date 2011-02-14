@@ -28,3 +28,13 @@ Example:
 http://localhost:8080/get-meaning?url=http://www.google.com
 
 
+### Sample Code:
+
+    // extract the best image representing an url
+
+    String url = "http://www.google.com"
+
+    MetaContentExtractor extractor = new MetaContentExtractor();
+	OGObject obj = extractor.extractFromUrl(url);
+	
+    String bestImageURL = obj.getImage();
