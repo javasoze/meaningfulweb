@@ -19,6 +19,7 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.params.CookiePolicy;
+import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.conn.params.ConnManagerParams;
 import org.apache.http.conn.params.ConnPerRouteBean;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -118,6 +119,9 @@ public class HttpComponentsServiceImpl
   public void initialize() {
 
     HttpParams params = new BasicHttpParams();
+
+   // turn on redirecting
+    HttpClientParams.setRedirecting(params,true);
 
     params.setParameter(HttpProtocolParams.USER_AGENT, userAgent);
     params.setParameter(HttpProtocolParams.PROTOCOL_VERSION,
