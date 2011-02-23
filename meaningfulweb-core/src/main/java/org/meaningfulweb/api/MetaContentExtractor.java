@@ -119,14 +119,14 @@ public class MetaContentExtractor {
 	  }
 	}
 	
-	public OGObject extract(String url,InputStream in,Metadata meta) throws Exception{
-	  OGObject obj = new OGObject();
+	public MeaningfulWebObject extract(String url,InputStream in,Metadata meta) throws Exception{
+	  MeaningfulWebObject obj = new MeaningfulWebObject();
 	  Map<String,String> ogMeta = obj.getMeta();
 	  MediaType type = _detector.detect(in, meta);
 
 	  String domain =  URLUtil.extractDomainFromUrl(url);
 	  if (domain!=null){
-	    ogMeta.put("domain",domain);
+	    obj.setDomain(domain);
 	  }
 	  ogMeta.put("content-type",type.toString());
 	  if ("image".equals(type.getType())){
@@ -193,7 +193,7 @@ public class MetaContentExtractor {
 	  return obj;
 	}
 	
-	public OGObject extractFromUrl(String url){
+	public MeaningfulWebObject extractFromUrl(String url){
 		HttpClientService httpClient = HttpClientFactory.getHttpClientService();
 		
 		HttpGet httpget = null;
@@ -207,7 +207,7 @@ public class MetaContentExtractor {
 		 }
 
 		 httpget = new HttpGet(url);
-		 OGObject obj = new OGObject();
+		 MeaningfulWebObject obj = new MeaningfulWebObject();
 		 try{
 		   HttpEntity entity = httpClient.doGet(httpget);
 		   
