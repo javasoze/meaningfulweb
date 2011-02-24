@@ -5,6 +5,10 @@ We aim to extract structured information from a web resource:
 
 url --> meaningfulweb engine --> structured information
 
+### Homepage:
+
+[http://www.meaningfulweb.org](http://www.meaningfulweb.org)
+
 ### Artifacts:
 
 1. meaningfulweb-opengraph.jar <- open graph parser
@@ -13,20 +17,20 @@ url --> meaningfulweb engine --> structured information
 
 ### Build:
 
-Build and release are managed via Maven: (http://maven.apache.org/)[http://maven.apache.org/]
+Build and release are managed via Maven: [http://maven.apache.org/](http://maven.apache.org/)
 
 1. run the script: bin/mvn-install.sh to install .jar files in jars/ to local maven repo
 2. build opengraph: under meaningfulweb-opengraph/, do: mvn install
 3. build core: under meaningfulweb-core/, do: mvn install
 4. start webapp: under meaningfulweb-app/, do: mvn jetty:run
 
-application should be running at: (http://localhost:8080/)[http://localhost:8080/]
+application should be running at: [http://localhost:8080/](http://localhost:8080/)
 
-the rest service should be running at: (http://localhost:8080/get-meaning?url=xxx)[http://localhost:8080/get-meaning?url=xxx]
+the rest service should be running at: [http://localhost:8080/get-meaning?url=xxx](http://localhost:8080/get-meaning?url=xxx)
 
 Example:
 
-(http://localhost:8080/get-meaning?url=http://www.google.com)[http://localhost:8080/get-meaning?url=http://www.google.com]
+[http://localhost:8080/get-meaning?url=http://www.google.com](http://localhost:8080/get-meaning?url=http://www.google.com)
 
 
 ### Sample Code:
@@ -48,8 +52,9 @@ Example:
 
 ### Bugs:
 
-File bugs on our jira system at: (http://snaprojects.jira.com/browse/MWEB)[http://snaprojects.jira.com/browse/MWEB]
+File bugs on our jira system at: [http://snaprojects.jira.com/browse/MWEB](http://snaprojects.jira.com/browse/MWEB)
 
 ### Wikis:
 
-Wiki Home: (http://snaprojects.jira.com/wiki/display/MWEB/Home)[http://snaprojects.jira.com/wiki/display/MWEB/Home]
+Wiki Home: [http://snaprojects.jira.com/wiki/display/MWEB/Home](http://snaprojects.jira.com/wiki/display/MWEB/Home)
+
