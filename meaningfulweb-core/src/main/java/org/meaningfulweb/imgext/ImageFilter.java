@@ -135,6 +135,8 @@ public class ImageFilter{
       {
     	long s = 0L;
     	if (image.getWidth()!=null && image.getHeight()!=null){
+    		if (image.getWidth()==1 || image.getHeight()==1) continue;
+    		if (image.getWidth()==0 || image.getHeight()==0) continue;
     		s = image.getWidth()*image.getHeight();
     	}
     	if (s>maxSize) maxSize=s;

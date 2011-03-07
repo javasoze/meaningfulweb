@@ -20,13 +20,11 @@ import org.apache.tika.mime.MediaType;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
-import org.apache.tika.parser.txt.CharsetDetector;
 import org.apache.tika.parser.txt.TXTParser;
 import org.meaningfulweb.cext.Extract;
 import org.meaningfulweb.cext.HtmlContentProcessorFactory;
 import org.meaningfulweb.cext.HtmlExtractor;
 import org.meaningfulweb.detector.DetectorFactory;
-import org.meaningfulweb.opengraph.OGObject;
 import org.meaningfulweb.util.ImageUtil;
 import org.meaningfulweb.util.URIUtils;
 import org.meaningfulweb.util.URLUtil;
@@ -239,7 +237,8 @@ public class MetaContentExtractor {
 		MetaContentExtractor extractor = new MetaContentExtractor();
 		//String url = "http://twitpic.com/3sryl9";
 		//String url = "http://www.seobook.com/google-kills-ehows-competitors";
-		String url ="http://techcrunch.com/2011/03/06/apples-jointventure-for-business-gets-official/";
+		//String url ="http://www.useit.com/papers/anti-mac.html";
+		String url ="http://blog.scottolsen.net/?p=575";
         MeaningfulWebObject obj = extractor.extractFromUrl(url);
 		
 		System.out.println(obj);

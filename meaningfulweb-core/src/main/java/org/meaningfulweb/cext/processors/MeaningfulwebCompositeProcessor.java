@@ -4,9 +4,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.jdom.Document;
 import org.meaningfulweb.cext.HtmlContentProcessor;
+import org.meaningfulweb.opengraph.OpenGraphParser;
 
 public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
 	private final OpengraphContentProcessor _opengraphProcessor;
@@ -49,10 +53,11 @@ public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
 	public boolean processContent(Document document) {
 		boolean success;
 		
+		Map<String,Object> currentlyExtracted = getExtracted();
 		success = _opengraphProcessor.processContent(document);
 		if (success){
 			Map<String,Object> extracted = _opengraphProcessor.getExtracted();
-		    getExtracted().putAll(extracted);   
+			currentlyExtracted.putAll(extracted);   
 		}
 		
 		if (getExtracted().get("title")==null){
@@ -61,7 +66,7 @@ public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
 		
 		Set<String> headerSet = new HashSet<String>();
 		for (String header : INTERESTED_HEADERS){
-		  if (getExtracted().get(header)==null){
+		  if (currentlyExtracted.get(header)==null){
 			headerSet.add(header);
 		  }
 		}
@@ -74,7 +79,15 @@ public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
 			success = _elementProcessor.processContent(document);
 			if (success){
 				Map<String,Object> extracted = _elementProcessor.getExtracted();
-			    getExtracted().putAll(extracted);   
+				Set<Entry<String,Object>> entries = extracted.entrySet();
+				for (Entry<String,Object> entry : entries){
+					String key = entry.getKey();
+					String val = (String)entry.getValue();
+					if (OpenGraphParser.UNESCAPE_HTML_FIELDS.contains(key)){
+						val = StringEscapeUtils.unescapeHtml(val);
+					}
+					currentlyExtracted.put(key, val);
+				}   
 			}
 		}
 		
