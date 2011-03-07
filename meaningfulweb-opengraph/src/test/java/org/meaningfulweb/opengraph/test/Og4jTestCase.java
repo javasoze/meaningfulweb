@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
 
 import junit.framework.TestCase;
+
 import org.meaningfulweb.opengraph.OGObject;
 import org.meaningfulweb.opengraph.OpenGraphParser;
 
@@ -13,9 +15,14 @@ public class Og4jTestCase extends TestCase {
 
 	static final File TestDataDir = new File("src/test/test-data");
 	
+
 	private static OGObject read(File f) throws IOException{
+		return read(f,null);
+	}
+	
+	private static OGObject read(File f,Set<String> unscapeHtml) throws IOException{
 		FileReader reader = new FileReader(f);
-		OGObject obj = OpenGraphParser.parse(reader);
+		OGObject obj = OpenGraphParser.parse(reader,unscapeHtml);
 		reader.close();
 		return obj;
 	}
@@ -27,12 +34,18 @@ public class Og4jTestCase extends TestCase {
 		assertFalse(obj.isValid());
 	}
 	
+	public void testUnescapeHtml() throws Exception{
+		File emptyHtml = new File(TestDataDir,"unescapeTestHtml.html");
+		OGObject obj = read(emptyHtml,OpenGraphParser.UNESCAPE_HTML_FIELDS);
+		assertEquals("Shaquille O\'Neal\'", obj.getTitle());
+		assertEquals("Shaquille O\'Neal\' ", obj.getDescription());
+	}
+	
 	public void testInvalid() throws Exception{
 		File invalidHtml = new File(TestDataDir,"invalid.html");
 		OGObject obj = read(invalidHtml);
-		Map<String,String> metaMap = obj.getMeta();
-		assertEquals("img", metaMap.get("image"));
-		assertEquals("invalid", metaMap.get("title"));
+		assertEquals("img", obj.getImage());
+		assertEquals("invalid", obj.getTitle());
 		assertFalse(obj.isValid());
 	}
 	

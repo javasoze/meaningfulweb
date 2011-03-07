@@ -237,9 +237,10 @@ public class MetaContentExtractor {
 	
 	public static void main(String[] args) throws Exception{
 		MetaContentExtractor extractor = new MetaContentExtractor();
-		String url = "http://twitpic.com/3sryl9";
-		
-        OGObject obj = extractor.extractFromUrl(url);
+		//String url = "http://twitpic.com/3sryl9";
+		//String url = "http://www.seobook.com/google-kills-ehows-competitors";
+		String url ="http://techcrunch.com/2011/03/06/apples-jointventure-for-business-gets-official/";
+        MeaningfulWebObject obj = extractor.extractFromUrl(url);
 		
 		System.out.println(obj);
 	}

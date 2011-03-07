@@ -27,7 +27,7 @@ public class OGObject implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	public final static String[] REQUIRED_META = new String[]{"title", "type", "image", "url" };
+	public final static String[] REQUIRED_META = new String[]{OpenGraphVocabulary.TITLE, OpenGraphVocabulary.TYPE, OpenGraphVocabulary.IMAGE, OpenGraphVocabulary.URL };
 	public static final String MEDIA_URL = "url";
 
 	private final Map<String,String> _meta = new HashMap<String,String>();
@@ -68,53 +68,53 @@ public class OGObject implements Serializable {
 	}
 	
 	public String getTitle(){
-		return _meta.get("title");
+		return _meta.get(OpenGraphVocabulary.TITLE);
 	}
 	
 	public String getImage(){
-		return _meta.get("image");
+		return _meta.get(OpenGraphVocabulary.IMAGE);
 	}
 	
 	public String getType(){
-		return _meta.get("type");
+		return _meta.get(OpenGraphVocabulary.TYPE);
 	}
 	
 	public String getUrl(){
-		return _meta.get("url");
+		return _meta.get(OpenGraphVocabulary.URL);
 	}
 	
 	public String getDescription(){
-		return _meta.get("description");
+		return _meta.get(OpenGraphVocabulary.DESCRIPTION);
 	}
 	
 	public String getSiteName(){
-		return _meta.get("site_name");
+		return _meta.get(OpenGraphVocabulary.SITE_NAME);
 	}
 	
 	public String getStreetAddress(){
-		return _meta.get("street-address");
+		return _meta.get(OpenGraphVocabulary.STREET_ADDRESS);
 	}
 	
 	public String getLocality(){
-		return _meta.get("locality");
+		return _meta.get(OpenGraphVocabulary.LOCALITY);
 	}
 	
 	public String getRegion(){
-		return _meta.get("region");
+		return _meta.get(OpenGraphVocabulary.REGION);
 	}
 	
 	public String getPostalCode(){
-		return _meta.get("postal-code");
+		return _meta.get(OpenGraphVocabulary.POSTAL_CODE);
 	}
 	
 	public String getCountryName(){
-		return _meta.get("country-name");
+		return _meta.get(OpenGraphVocabulary.COUNTRY_NAME);
 	}
 	
 	public float getLatitude(){
 		float lat;
 		try{
-		   lat = Float.parseFloat(_meta.get("latitude"));	
+		   lat = Float.parseFloat(_meta.get(OpenGraphVocabulary.LATITUDE));	
 		}
 		catch(Exception e){
 			lat = Float.NaN;
@@ -125,7 +125,7 @@ public class OGObject implements Serializable {
 	public float getLongitude(){
 		float lon;
 		try{
-			lon = Float.parseFloat(_meta.get("longitude"));	
+			lon = Float.parseFloat(_meta.get(OpenGraphVocabulary.LONGITUDE));	
 		}
 		catch(Exception e){
 			lon = Float.NaN;
@@ -134,15 +134,15 @@ public class OGObject implements Serializable {
 	}
 	
 	public String getEmail(){
-		return _meta.get("email");
+		return _meta.get(OpenGraphVocabulary.EMAIL);
 	}
 	
 	public String getPhoneNumber(){
-		return _meta.get("phone_number");
+		return _meta.get(OpenGraphVocabulary.PHONE_NUMBER);
 	}
 	
 	public String getFaxNumber(){
-		return _meta.get("fax_number");
+		return _meta.get(OpenGraphVocabulary.FAX_NUMBER);
 	}
 	
 	public String getAudioProp(String prop){

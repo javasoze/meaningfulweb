@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,6 +19,7 @@ import net.htmlparser.jericho.Source;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.lang.StringEscapeUtils;
 
 
 /*
@@ -46,11 +48,27 @@ public class OpenGraphParser {
 	private static final int OG_VIDEO_PREFIX_CHAR_COUNT = 6; // length of "video:"
 	private static final int OG_AUDIO_PREFIX_CHAR_COUNT = 6; // length of "audio:"
 	
-	public static OGObject parse(String html){
-		return parse(new Source(html));
+	public static final Set<String> UNESCAPE_HTML_FIELDS = new HashSet<String>();
+	
+	static{
+		UNESCAPE_HTML_FIELDS.add(OpenGraphVocabulary.TITLE);
+		UNESCAPE_HTML_FIELDS.add(OpenGraphVocabulary.DESCRIPTION);
 	}
 	
+	public static OGObject parse(String html,Set<String> unescapeHtml){
+		return parse(new Source(html),unescapeHtml);
+	}
+	
+	public static OGObject parse(String html){
+		return parse(html,null);
+	}
+	
+
 	public static OGObject parse(Map<String,String> ogmap){
+		return parse(ogmap,null);
+	}
+	
+	public static OGObject parse(Map<String,String> ogmap,Set<String> unescapeHtml){
 		OGObject obj = new OGObject();
 		Map<String,String> meta= obj.getMeta();
 		Map<String,String> video= obj.getVideo();
@@ -79,6 +97,9 @@ public class OpenGraphParser {
 				}
 			}
 			else{
+				if (unescapeHtml!=null && unescapeHtml.size() > 0 && unescapeHtml.contains(name)){
+				  content = StringEscapeUtils.unescapeHtml(content);
+				}
 				meta.put(name, content);
 			}
 		}
@@ -86,6 +107,9 @@ public class OpenGraphParser {
 	}
 	
 	public static OGObject parse(Source source){
+		return parse(source,null);
+	}
+	public static OGObject parse(Source source,Set<String> unescapeHtml){
 	    Element htmlTag = source.getFirstElement(HTMLElementName.HTML);
 		List<Element> elementList = source.getAllElements(HTMLElementName.META);
 		Map<String,String> datamap = new HashMap<String,String>();
@@ -100,7 +124,7 @@ public class OpenGraphParser {
 				datamap.put(name, content);
 			}
 		}
-		return parse(datamap);
+		return parse(datamap,unescapeHtml);
 	}
 
   private static final String XMLNS_PREFIX = "xmlns:";
@@ -132,6 +156,10 @@ public class OpenGraphParser {
 	private static final int BUFFER_SIZE = 4*1024; // 4k buffer
 	
 	public static OGObject parse(Reader reader) throws IOException{
+		return parse(reader,null);
+	}
+	
+	public static OGObject parse(Reader reader,Set<String> unescapeHtml) throws IOException{
 		StringBuffer buffer = new StringBuffer();
 		char[] buf = new char[BUFFER_SIZE];
 		
@@ -142,17 +170,18 @@ public class OpenGraphParser {
 			buffer.append(buf, 0, len);
 		}
 		
-		return parse(buffer.toString());
+		return parse(buffer.toString(),unescapeHtml);
 	}
 	
 	public static OGObject fetchAndParse(HttpClient httpClient,String uri) throws IOException{
+		
 		GetMethod get = null;
 		try{
 			get = new GetMethod(uri);
 			int status = httpClient.executeMethod(get);
 			if (status==HttpStatus.SC_OK){
 				InputStreamReader reader = new InputStreamReader(get.getResponseBodyAsStream(),get.getResponseCharSet());		
-				return parse(reader);
+				return parse(reader,UNESCAPE_HTML_FIELDS);
 			}
 			else{
 				return null;
@@ -166,7 +195,7 @@ public class OpenGraphParser {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		String url = "http://techcrunch.com/2011/01/18/microsoft-kinect-developer-johnny-chung-lee-jumps-ship-and-lands-at-google/";
+		String url = "http://techcrunch.com/2011/03/06/apples-jointventure-for-business-gets-official/";
 		HttpClient client = new HttpClient();
 		OGObject obj = OpenGraphParser.fetchAndParse(client, url);
 		System.out.println(obj);

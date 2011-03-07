@@ -22,6 +22,7 @@ public class OpengraphContentProcessor
 
   private Set<String> names = new LinkedHashSet<String>();
   private boolean includeAll = false;
+  private boolean skipUnescapingHtml = false; 
 
   public Collection<String> getNames() {
     return names;
@@ -46,6 +47,14 @@ public class OpengraphContentProcessor
 
   public void setIncludeAll(boolean includeAll) {
     this.includeAll = includeAll;
+  }
+
+  public boolean isSkipUnescapingHtml() {
+	return skipUnescapingHtml;
+  }
+
+  public void setSkipUnescapingHtml(boolean skipUnescapingHtml) {
+	this.skipUnescapingHtml = skipUnescapingHtml;
   }
 
   @Override
@@ -81,7 +90,8 @@ public class OpengraphContentProcessor
         }
 
         // parse the elements with opengraph
-        OGObject ogObj = OpenGraphParser.parse(datamap);
+        Set<String> fieldsToUnescape = skipUnescapingHtml ? null : OpenGraphParser.UNESCAPE_HTML_FIELDS;
+        OGObject ogObj = OpenGraphParser.parse(datamap,fieldsToUnescape);
         if (!ogObj.isEmpty()) {
 
           Map<String, String> metaMap = ogObj.getMeta();
