@@ -238,7 +238,9 @@ public class MetaContentExtractor {
 		//String url = "http://twitpic.com/3sryl9";
 		//String url = "http://www.seobook.com/google-kills-ehows-competitors";
 		//String url ="http://www.useit.com/papers/anti-mac.html";
-		String url ="http://blog.scottolsen.net/?p=575";
+		//String url ="http://sns.mx/WGdXy4";
+		//String url = "http://bit.ly/eL7wGH";
+		String url = "http://bit.ly/fTb5HY";
         MeaningfulWebObject obj = extractor.extractFromUrl(url);
 		
 		System.out.println(obj);
