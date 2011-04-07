@@ -71,6 +71,7 @@
   </developers>
 
   <modules>
+    <module>meaningfulweb-parent</module>
     <module>meaningfulweb-core</module>
     <module>meaningfulweb-opengraph</module>
   </modules>
