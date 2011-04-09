@@ -27,6 +27,9 @@ public class URIUtils {
     unsafe.put("[", "5B");
     unsafe.put("]", "5D");
     unsafe.put("`", "60");
+    unsafe.put("\n", "20");
+    unsafe.put("\r", "20");
+    unsafe.put("\t", "20");
   }
 
   private static Map<String, String> reserved = new HashMap<String, String>();
