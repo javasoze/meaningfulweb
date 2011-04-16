@@ -25,18 +25,20 @@ public class ImageInfo implements Serializable
   private final String _title;
   private final Integer _width;
   private final Integer _height;
+  private final Long _size;
   
   public ImageInfo(String url)
   {
-    this(url, null, null, null);
+    this(url, null, null, null,null);
   }
   
-  public ImageInfo(String uri, String title, Integer width, Integer height)
+  public ImageInfo(String uri, String title, Integer width, Integer height,Long size)
   {
     _uri = uri;
     _title = title;
     _width = width;
     _height = height;
+    _size = size;
   }
   
   public String getUri()
@@ -59,12 +61,17 @@ public class ImageInfo implements Serializable
     return _height;
   }
   
+  public Long getSize(){
+	  return _size;
+  }
+  
   public String toString(){
 	  StringBuilder buf = new StringBuilder();
 	  buf.append("uri: ").append(_uri).append("\n");
 	  buf.append("title: ").append(_title).append("\n");
 	  buf.append("width: ").append(_width).append("\n");
-	  buf.append("height: ").append(_height);
+	  buf.append("height: ").append(_height).append("\n");
+	  buf.append("size: ").append(_size);
 	  return buf.toString();
   }
 }

@@ -24,10 +24,12 @@ public interface ImageSizeExtractor {
   public static final class ImageSize{
 	  public final int width;
 	  public final int height;
+	  public final long size;
 	  
-	  public ImageSize(int width,int height){
+	  public ImageSize(int width,int height,long size){
 		this.width = width;
 		this.height = height;
+		this.size = size;
 	  }
   }
   
@@ -40,13 +42,13 @@ public interface ImageSizeExtractor {
 	public Map<ImageMeta,ImageSize> extractSize(List<ImageMeta> imgMetas){
 		HashMap<ImageMeta,ImageSize> map = new HashMap<ImageMeta,ImageSize>();
 		for (ImageMeta meta : imgMetas){
-			map.put(meta, new ImageSize(meta.getWidth(),meta.getHeight()));
+			map.put(meta, new ImageSize(meta.getWidth(),meta.getHeight(),-1));
 		}
 		return map;
 	}
 
 	public ImageSize extractSize(ImageMeta imgMeta){
-		return new ImageSize(imgMeta.getWidth(),imgMeta.getHeight());
+		return new ImageSize(imgMeta.getWidth(),imgMeta.getHeight(),-1);
 	}
   }
 }

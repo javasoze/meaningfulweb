@@ -3,14 +3,18 @@ package org.meaningfulweb.cext.processors;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.HttpHead;
 import org.jdom.Document;
 import org.meaningfulweb.cext.HtmlContentProcessor;
 import org.meaningfulweb.opengraph.OpenGraphParser;
+import org.meaningfulweb.util.URIUtils;
+import org.meaningfulweb.util.http.HttpClientFactory;
+import org.meaningfulweb.util.http.HttpClientService;
 
 public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
 	private final OpengraphContentProcessor _opengraphProcessor;
@@ -97,13 +101,37 @@ public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
 		    getExtracted().putAll(extracted);   
 		}
 		
-		if (getExtracted().get("image")==null){
+		if (currentlyExtracted.get("image")==null){
 		  success = _bestimageProcessor.processContent(document);
 		  if (success){
 			Map<String,Object> extracted = _bestimageProcessor.getExtracted();
 		    getExtracted().putAll(extracted);
 		  }
 		}
+		
+		Object imgUrlObj;
+		if ((imgUrlObj = currentlyExtracted.get("image"))!=null){
+		  Object imgSize = currentlyExtracted.get("image-content-length");
+		  if (imgSize==null){
+			String imgUrl = (String)imgUrlObj;
+			HttpClientService httpClient = HttpClientFactory.getHttpClientService();
+			
+			boolean isValidURI = URIUtils.isValidURI(imgUrl);
+			if (!isValidURI) {
+			  imgUrl = URIUtils.fixInvalidUri(imgUrl);
+			}
+			
+			HttpHead httpHead= new HttpHead(imgUrl);
+			try{
+			  HttpEntity entity = httpClient.doRequest(httpHead);
+			  currentlyExtracted.put("image-content-length", String.valueOf(entity.getContentLength()));
+			}
+			catch(Exception e){
+				httpHead.abort();
+			}
+		  }
+		}
+		
 		return success;
 	}
 

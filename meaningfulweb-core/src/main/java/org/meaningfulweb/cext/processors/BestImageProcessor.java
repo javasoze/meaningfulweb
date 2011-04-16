@@ -95,7 +95,7 @@ public class BestImageProcessor
        // if (hasWidth && hasHeight) {
           String url = URLUtil.toAbsoluteURL(baseUrl, src);
           ImageMeta imgInfo = new ImageMeta(imgMetas.size(), alt, title, width,
-            height, url, onclick);
+            height,-1L, url, onclick);
           imgMetas.add(imgInfo);
         //}
 
@@ -170,6 +170,10 @@ public class BestImageProcessor
       true, true);
     if (mediaContentInfo != null) {
       addExtractedValue("image", mediaContentInfo.getUri());
+      Long size = mediaContentInfo.getSize();
+      if (size!=null && size>0){
+          addExtractedValue("image-content-length",size);
+      }
     }
     return true;
   }

@@ -18,6 +18,7 @@ import org.apache.http.HttpVersion;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.conn.params.ConnManagerParams;
@@ -221,7 +222,7 @@ public class HttpComponentsServiceImpl
 
 	 httpget = new HttpGet(url);
 	  
-	 HttpEntity entity = doGet(httpget);
+	 HttpEntity entity = doRequest(httpget);
 	 if (entity != null) {
 		try{
 	      InputStream is = entity.getContent();
@@ -236,7 +237,7 @@ public class HttpComponentsServiceImpl
 	 return null;
   }
   
-  public HttpEntity doGet(HttpGet httpget)
+  public HttpEntity doRequest(HttpRequestBase httpget)
     throws HttpException {
 
     // return immediately if we are shutting down and no longer active

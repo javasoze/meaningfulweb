@@ -97,7 +97,7 @@ public class ImageSelector{
     // prefer the image_src if we have it
     if(extractedContents.getThumbnailImageUrl() != null)
     {
-      ImageMeta thumbnail = new ImageMeta(-1, null, null, null, null, extractedContents.getThumbnailImageUrl(), null);
+      ImageMeta thumbnail = new ImageMeta(-1, null, null, null, null, null,extractedContents.getThumbnailImageUrl(), null);
       
       try
       {

@@ -90,13 +90,13 @@ public class ImageFetcher implements ImageSizeExtractor
 	   httpget = new HttpGet(path);
 	   InputStream in = null;
 	   try{
-		 HttpEntity entity = httpClient.doGet(httpget);
+		 HttpEntity entity = httpClient.doRequest(httpget);
 		 
 		 in = entity.getContent();
 		 prop.setInput(new BufferedInputStream(in));
 
 		   if (prop.check()){
-			 dim = new ImageSize(prop.getWidth(),prop.getHeight());
+			 dim = new ImageSize(prop.getWidth(),prop.getHeight(),entity.getContentLength());
 		   }
  
 	   }

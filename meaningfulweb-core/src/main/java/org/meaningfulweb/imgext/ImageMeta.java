@@ -23,9 +23,9 @@ public class ImageMeta extends ImageInfo{
 	  String _alt;
 	  boolean _hasOnclick;
 	  
-	  public ImageMeta(int position, String alt, String title, String width, String height, String src, String onClick)
+	  public ImageMeta(int position, String alt, String title, String width, String height, Long size,String src, String onClick)
 	  {
-	    super(src, title, toInteger(width), toInteger(height));
+	    super(src, title, toInteger(width), toInteger(height),size);
 	    _position = position;
 	    _alt = alt;
 	    _hasOnclick = onClick!=null && onClick.length()>0;
