@@ -90,7 +90,7 @@ public class ImageFetcher implements ImageSizeExtractor
 	   httpget = new HttpGet(path);
 	   InputStream in = null;
 	   try{
-		 HttpEntity entity = httpClient.doRequest(httpget);
+		 HttpEntity entity = httpClient.doGet(httpget);
 		 
 		 in = entity.getContent();
 		 prop.setInput(new BufferedInputStream(in));

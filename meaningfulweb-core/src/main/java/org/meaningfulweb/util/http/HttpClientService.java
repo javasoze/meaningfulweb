@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
 
 public interface HttpClientService {
 
@@ -15,7 +17,10 @@ public interface HttpClientService {
 
   public boolean ping(String url);
   
-  public HttpEntity doRequest(HttpRequestBase httpget) throws HttpException;
+  public HttpEntity doGet(HttpGet httpget) throws HttpException;
+  
+
+  public HttpResponse doHead(HttpHead httphead) throws HttpException;
   
 
   public byte[] postAsBody(String url, String body, String mimeType,

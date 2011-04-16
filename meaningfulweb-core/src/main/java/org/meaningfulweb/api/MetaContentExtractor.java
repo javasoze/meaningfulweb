@@ -207,7 +207,7 @@ public class MetaContentExtractor {
 		 httpget = new HttpGet(url);
 		 MeaningfulWebObject obj = new MeaningfulWebObject();
 		 try{
-		   HttpEntity entity = httpClient.doRequest(httpget);
+		   HttpEntity entity = httpClient.doGet(httpget);
 		   
 		   Metadata metadata = new Metadata();
 		   metadata.add(Metadata.RESOURCE_NAME_KEY, url);
@@ -235,12 +235,13 @@ public class MetaContentExtractor {
 	
 	public static void main(String[] args) throws Exception{
 		MetaContentExtractor extractor = new MetaContentExtractor();
-		//String url = "http://twitpic.com/3sryl9";
+		String url = "http://twitpic.com/3sryl9";
 		//String url = "http://www.seobook.com/google-kills-ehows-competitors";
 		//String url ="http://www.useit.com/papers/anti-mac.html";
 		//String url ="http://sns.mx/WGdXy4";
 		//String url = "http://bit.ly/eL7wGH";
-		String url = "http://bit.ly/dK8DdN";
+		//String url = "http://bit.ly/dK8DdN";
+		
         MeaningfulWebObject obj = extractor.extractFromUrl(url);
 		
 		System.out.println(obj);

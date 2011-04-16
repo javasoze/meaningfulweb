@@ -6,9 +6,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.HttpHead;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.meaningfulweb.cext.HtmlContentProcessor;
 import org.meaningfulweb.opengraph.OpenGraphParser;
@@ -17,6 +20,7 @@ import org.meaningfulweb.util.http.HttpClientFactory;
 import org.meaningfulweb.util.http.HttpClientService;
 
 public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
+	private static final Logger logger = Logger.getLogger(MeaningfulwebCompositeProcessor.class);
 	private final OpengraphContentProcessor _opengraphProcessor;
 	private final ElementProcessor _elementProcessor;
 	private final BoilerpipeArticleProcessor _boilerpipeProcessor;
@@ -121,13 +125,16 @@ public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
 			  imgUrl = URIUtils.fixInvalidUri(imgUrl);
 			}
 			
-			HttpHead httpHead= new HttpHead(imgUrl);
+			HttpGet httpGet= new HttpGet(imgUrl);
 			try{
-			  HttpEntity entity = httpClient.doRequest(httpHead);
-			  currentlyExtracted.put("image-content-length", String.valueOf(entity.getContentLength()));
+				HttpEntity entity = httpClient.doGet(httpGet);
+				if (entity!=null){
+				  currentlyExtracted.put("image-content-length", String.valueOf(entity.getContentLength()));
+				}
 			}
 			catch(Exception e){
-				httpHead.abort();
+				logger.error(e.getMessage(),e);
+				httpGet.abort();
 			}
 		  }
 		}

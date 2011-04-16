@@ -17,6 +17,7 @@ import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.HttpVersion;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.params.CookiePolicy;
@@ -166,6 +167,7 @@ public class HttpComponentsServiceImpl
       public void process(final HttpResponse response, final HttpContext context)
         throws HttpException, IOException {
         HttpEntity entity = response.getEntity();
+        if (entity==null) return;
         Header ceheader = entity.getContentEncoding();
         if (ceheader != null) {
           HeaderElement[] codecs = ceheader.getElements();
@@ -222,7 +224,7 @@ public class HttpComponentsServiceImpl
 
 	 httpget = new HttpGet(url);
 	  
-	 HttpEntity entity = doRequest(httpget);
+	 HttpEntity entity = doGet(httpget);
 	 if (entity != null) {
 		try{
 	      InputStream is = entity.getContent();
@@ -237,7 +239,36 @@ public class HttpComponentsServiceImpl
 	 return null;
   }
   
-  public HttpEntity doRequest(HttpRequestBase httpget)
+  @Override
+  public HttpResponse doHead(HttpHead httpget) throws HttpException {
+
+  // return immediately if we are shutting down and no longer active
+  if (!active.get()) {
+    return null;
+  }
+
+  try {
+    HttpResponse response = httpClient.execute(httpget);
+    StatusLine status = response.getStatusLine();
+    int statusCode = status.getStatusCode();
+    if (statusCode >= 400) {
+      throw new HttpException(statusCode, httpget.getURI()+":"+status.getReasonPhrase());
+    }
+    return response;
+  }
+  catch (HttpException he) {
+    throw he;
+  }
+  catch (Exception e) {
+    LOG.error("Error getting url: " + httpget.getURI(), e);
+    httpget.abort();
+    throw new HttpException(e);
+  }
+
+}
+  
+  @Override
+  public HttpEntity doGet(HttpGet httpget)
     throws HttpException {
 
     // return immediately if we are shutting down and no longer active
