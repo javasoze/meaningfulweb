@@ -90,11 +90,14 @@ public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
 				Set<Entry<String,Object>> entries = extracted.entrySet();
 				for (Entry<String,Object> entry : entries){
 					String key = entry.getKey();
-					String val = String.valueOf(entry.getValue());
-					if (OpenGraphParser.UNESCAPE_HTML_FIELDS.contains(key)){
-						val = StringEscapeUtils.unescapeHtml(val);
+					Object valObj = entry.getValue();
+					if (valObj instanceof String){
+					  String val = (String)(valObj);
+					  if (OpenGraphParser.UNESCAPE_HTML_FIELDS.contains(key)){
+						valObj = StringEscapeUtils.unescapeHtml(val);
+					  }
 					}
-					currentlyExtracted.put(key, val);
+					currentlyExtracted.put(key, valObj);
 				}   
 			}
 		}
