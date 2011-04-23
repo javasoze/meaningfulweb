@@ -128,8 +128,10 @@ public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
 			HttpGet httpGet= new HttpGet(imgUrl);
 			try{
 				HttpEntity entity = httpClient.doGet(httpGet);
+				
 				if (entity!=null){
 				  currentlyExtracted.put("image-content-length", String.valueOf(entity.getContentLength()));
+				  IOUtils.closeQuietly(entity.getContent());
 				}
 			}
 			catch(Exception e){
