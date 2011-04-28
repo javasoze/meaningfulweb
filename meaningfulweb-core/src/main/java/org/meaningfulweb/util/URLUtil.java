@@ -251,12 +251,12 @@ public class URLUtil {
       .substring(filename, extIndex + 1) : null;
   }
 
-  public static String toAbsoluteURL(String baseURL, String relativeURL) {
+  public static String toAbsoluteURL(String baseURL, String contextUrl,String relativeURL) {
     
     // first we try to use java.net.URL to perform the conversion, if that
     // fails we can try using our own routine.
     try {
-      URL base = new URL(baseURL);
+      URL base = relativeURL.startsWith("/") ? new URL(baseURL) : new URL(contextUrl);
       String absolute = new URL(base, relativeURL).toExternalForm();
       return absolute;
     }

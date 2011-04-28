@@ -31,7 +31,7 @@ public class BestImageProcessor
   private final ImageSelector imgSelector = new ImageSelector(imageFilter,
     imageFetcher);
 
-  private void extractFromNodes(String baseUrl, int level, Content node,
+  private void extractFromNodes(String baseUrl, String contextUrl,int level, Content node,
     LinkedList<ImageMeta> imgMetas) {
 
     // don't go on forever, spider traps can kill JVM through stack overflow
@@ -93,7 +93,7 @@ public class BestImageProcessor
         }
 
        // if (hasWidth && hasHeight) {
-          String url = URLUtil.toAbsoluteURL(baseUrl, src);
+          String url = URLUtil.toAbsoluteURL(baseUrl, contextUrl,src);
           ImageMeta imgInfo = new ImageMeta(imgMetas.size(), alt, title, width,
             height,-1L, url, onclick);
           imgMetas.add(imgInfo);
@@ -104,7 +104,7 @@ public class BestImageProcessor
       List<Content> children = elem.getContent();
       if (children != null && children.size() > 0) {
         for (Content child : children) {
-          extractFromNodes(baseUrl, ++level, child, imgMetas);
+          extractFromNodes(baseUrl, contextUrl,++level, child, imgMetas);
         }
       }
     }
@@ -162,7 +162,7 @@ public class BestImageProcessor
     Element rootElem = document.getRootElement();
     List<Content> contents = rootElem.getContent();
     for (Content child : contents) {
-      extractFromNodes(baseUrl, 0, child, imgMetas);
+      extractFromNodes(baseUrl, url,0, child, imgMetas);
     }
 
     ExtractedContents extracted = new ExtractedContents(baseUrl, imgMetas);

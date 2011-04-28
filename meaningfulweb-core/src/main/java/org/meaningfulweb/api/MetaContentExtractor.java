@@ -7,11 +7,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.tika.detect.Detector;
 import org.apache.tika.exception.TikaException;
@@ -30,7 +32,6 @@ import org.meaningfulweb.util.URIUtils;
 import org.meaningfulweb.util.URLUtil;
 import org.meaningfulweb.util.http.HttpClientFactory;
 import org.meaningfulweb.util.http.HttpClientService;
-import org.meaningfulweb.util.http.HttpException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -40,6 +41,8 @@ public class MetaContentExtractor {
 
 	private static Logger logger = LoggerFactory.getLogger(MetaContentExtractor.class);
 	
+	private static final String RESOLVED_URL = "resolved-url";
+	private static final String STATUS_CODE = "status-code";
 	private final Detector _detector;
 	private final Parser _autoParser;
 	private final TXTParser _txtParser;
@@ -195,6 +198,8 @@ public class MetaContentExtractor {
 		HttpClientService httpClient = HttpClientFactory.getHttpClientService();
 		
 		HttpGet httpget = null;
+		
+		String resolvedUrl;
 
 		 // if the uri is invalid try and clean it up a little before fetching
 		 boolean isValidURI = URIUtils.isValidURI(url);
@@ -207,27 +212,47 @@ public class MetaContentExtractor {
 		 httpget = new HttpGet(url);
 		 MeaningfulWebObject obj = new MeaningfulWebObject();
 		 try{
-		   HttpEntity entity = httpClient.doGet(httpget);
+		   HttpResponse response = httpClient.process(httpget);
+		   Header[] redirects = response.getHeaders("Location");
+		   if (redirects!=null && redirects.length>0){
+			   resolvedUrl = redirects[0].getValue();
+		   }
+		   else{
+			   resolvedUrl = httpget.getURI().toString();
+		   }
+		   int statusCode = response.getStatusLine().getStatusCode();
 		   
-		   Metadata metadata = new Metadata();
-		   metadata.add(Metadata.RESOURCE_NAME_KEY, url);
-		   metadata.add(Metadata.CONTENT_TYPE,entity.getContentType().getValue());
-		   InputStream is = null;
-		   try{
-			 is = entity.getContent();
-		     obj = extract(url, is, metadata);
+		   HttpEntity entity = response.getEntity();
+		   if (statusCode < 400) {
+			   Metadata metadata = new Metadata();
+			   metadata.add(Metadata.RESOURCE_NAME_KEY, url);
+			   metadata.add(Metadata.CONTENT_TYPE,entity.getContentType().getValue());
+			   
+			   InputStream is = null;
+			   try{
+				 is = entity.getContent();
+			     obj = extract(url, is, metadata);
+			   }
+			   catch(Exception e){
+				 logger.error(e.getMessage(),e);
+			   }
+			   finally{
+				 if (is!=null){
+				   IOUtils.closeQuietly(is);
+				 }
+			   }
+			   
+			   
 		   }
-		   catch(Exception e){
-			 logger.error(e.getMessage(),e);
-		   }
-		   finally{
-			 if (is!=null){
-			   IOUtils.closeQuietly(is);
-			 }
+		   else{
+			   IOUtils.closeQuietly(entity.getContent());
 		   }
 			
+		   Map<String,String> metaMap = obj.getMeta();
+		   metaMap.put(RESOLVED_URL, resolvedUrl);
+		   metaMap.put(STATUS_CODE, String.valueOf(statusCode));
 		 }
-		 catch(HttpException e){
+		 catch(Exception e){
 		   httpget.abort();
 		 }
 		 return obj;
@@ -235,7 +260,7 @@ public class MetaContentExtractor {
 	
 	public static void main(String[] args) throws Exception{
 		MetaContentExtractor extractor = new MetaContentExtractor();
-		String url = "http://twitpic.com/3sryl9";
+		String url = "http://127.0.0.1/~john/testMW/";
 		//String url = "http://www.seobook.com/google-kills-ehows-competitors";
 		//String url ="http://www.useit.com/papers/anti-mac.html";
 		//String url ="http://sns.mx/WGdXy4";

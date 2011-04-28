@@ -134,7 +134,7 @@ public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
 				
 				if (entity!=null){
 				  currentlyExtracted.put("image-content-length", String.valueOf(entity.getContentLength()));
-				  IOUtils.closeQuietly(entity.getContent());
+				  httpGet.abort();
 				}
 			}
 			catch(Exception e){

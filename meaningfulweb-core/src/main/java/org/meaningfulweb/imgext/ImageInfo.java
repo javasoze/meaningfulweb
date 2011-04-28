@@ -25,7 +25,7 @@ public class ImageInfo implements Serializable
   private final String _title;
   private final Integer _width;
   private final Integer _height;
-  private final Long _size;
+  private Long _size;
   
   public ImageInfo(String url)
   {
@@ -39,6 +39,10 @@ public class ImageInfo implements Serializable
     _width = width;
     _height = height;
     _size = size;
+  }
+  
+  public void setSize(Long size){
+	  _size = size;
   }
   
   public String getUri()

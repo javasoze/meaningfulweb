@@ -17,6 +17,7 @@
 package org.meaningfulweb.imgext;
 
 import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -93,20 +94,18 @@ public class ImageFetcher implements ImageSizeExtractor
 		 HttpEntity entity = httpClient.doGet(httpget);
 		 
 		 in = entity.getContent();
-		 prop.setInput(new BufferedInputStream(in));
+		 prop.setInput(in);
 
-		   if (prop.check()){
-			 dim = new ImageSize(prop.getWidth(),prop.getHeight(),entity.getContentLength());
-		   }
- 
+		 if (prop.check()){
+		   dim = new ImageSize(prop.getWidth(),prop.getHeight(),entity.getContentLength());
+		 }
+		   
 	   }
 	   catch(Exception e){
-		   httpget.abort();
+		   logger.error(e.getMessage(),e);
 	   }
 	   finally{
-		   if (in!=null){
-			   IOUtils.closeQuietly(in);
-		   }
+		   httpget.abort();
 	   }
 	
 	 //long end = System.currentTimeMillis();

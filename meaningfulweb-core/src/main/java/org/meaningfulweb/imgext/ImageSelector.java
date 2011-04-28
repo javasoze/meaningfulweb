@@ -101,8 +101,10 @@ public class ImageSelector{
       
       try
       {
-        if(filterFirstImage == false || _imageFilter.accept(_imageSizeExtractor.extractSize(thumbnail)))
+    	ImageSize imgSize = _imageSizeExtractor.extractSize(thumbnail);
+        if(filterFirstImage == false || _imageFilter.accept(imgSize))
         {
+          thumbnail.setSize(imgSize.size);
           images.add(0, thumbnail);
         }
       }

@@ -215,6 +215,7 @@ public class ImageFilter{
       {
     	long s = imgSize.width * imgSize.height;
     	if (maxSize<s) maxSize=s;
+    	image.setSize(imgSize.size);
     	results.add(image);
       }
     }

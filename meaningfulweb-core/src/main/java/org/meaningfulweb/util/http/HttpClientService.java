@@ -19,7 +19,8 @@ public interface HttpClientService {
   
   public HttpEntity doGet(HttpGet httpget) throws HttpException;
   
-
+  public HttpResponse process(HttpGet httpget) throws IOException;
+  
   public HttpResponse doHead(HttpHead httphead) throws HttpException;
   
 

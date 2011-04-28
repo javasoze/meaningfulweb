@@ -267,6 +267,12 @@ public class HttpComponentsServiceImpl
 
 }
   
+  @Override 
+
+  public HttpResponse process(HttpGet httpget) throws IOException{
+	  return  httpClient.execute(httpget);
+  }
+  
   @Override
   public HttpEntity doGet(HttpGet httpget)
     throws HttpException {
