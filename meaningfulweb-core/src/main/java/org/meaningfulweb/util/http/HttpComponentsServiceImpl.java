@@ -269,8 +269,8 @@ public class HttpComponentsServiceImpl
   
   @Override 
 
-  public HttpResponse process(HttpGet httpget) throws IOException{
-	  return  httpClient.execute(httpget);
+  public HttpResponse process(HttpGet httpget,HttpContext ctx) throws IOException{
+	  return  httpClient.execute(httpget,ctx);
   }
   
   @Override

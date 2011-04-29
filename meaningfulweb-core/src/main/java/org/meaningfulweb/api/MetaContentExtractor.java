@@ -11,10 +11,14 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.ExecutionContext;
+import org.apache.http.protocol.HttpContext;
 import org.apache.tika.detect.Detector;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
@@ -210,16 +214,18 @@ public class MetaContentExtractor {
 		 }
 
 		 httpget = new HttpGet(url);
+		 
 		 MeaningfulWebObject obj = new MeaningfulWebObject();
 		 try{
-		   HttpResponse response = httpClient.process(httpget);
-		   Header[] redirects = response.getHeaders("Location");
-		   if (redirects!=null && redirects.length>0){
-			   resolvedUrl = redirects[0].getValue();
-		   }
-		   else{
-			   resolvedUrl = httpget.getURI().toString();
-		   }
+		   HttpContext context = new BasicHttpContext();
+		   HttpResponse response = httpClient.process(httpget,context);
+		   
+		   HttpUriRequest currentReq = (HttpUriRequest) context.getAttribute( 
+	                ExecutionContext.HTTP_REQUEST);
+	       HttpHost currentHost = (HttpHost)  context.getAttribute( 
+	                ExecutionContext.HTTP_TARGET_HOST);
+	       resolvedUrl = currentHost.toURI() + currentReq.getURI();
+	        
 		   int statusCode = response.getStatusLine().getStatusCode();
 		   
 		   HttpEntity entity = response.getEntity();
@@ -260,8 +266,8 @@ public class MetaContentExtractor {
 	
 	public static void main(String[] args) throws Exception{
 		MetaContentExtractor extractor = new MetaContentExtractor();
-		String url = "http://127.0.0.1/~john/testMW/";
-		//String url = "http://www.seobook.com/google-kills-ehows-competitors";
+		//String url = "http://127.0.0.1/~john/testMW/";
+		String url = "http://www.seobook.com/google-kills-ehows-competitors";
 		//String url ="http://www.useit.com/papers/anti-mac.html";
 		//String url ="http://sns.mx/WGdXy4";
 		//String url = "http://bit.ly/eL7wGH";
