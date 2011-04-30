@@ -43,4 +43,12 @@ public class MeaningfulWebObject extends OGObject {
 	public void setDescription(String description){
 	  getMeta().put("description", description);	
 	}
+	
+	public String getText(){
+	  return getMeta().get("text");
+	}
+	
+	public String setText(String text){
+	  return getMeta().put("text",text);
+	}
 }

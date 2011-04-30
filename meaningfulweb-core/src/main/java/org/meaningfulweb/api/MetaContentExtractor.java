@@ -198,7 +198,7 @@ public class MetaContentExtractor {
 	  return obj;
 	}
 	
-	public MeaningfulWebObject extractFromUrl(String url){
+	public MeaningfulWebObject extractFromUrl(String url) throws IOException{
 		HttpClientService httpClient = HttpClientFactory.getHttpClientService();
 		
 		HttpGet httpget = null;
@@ -243,23 +243,22 @@ public class MetaContentExtractor {
 				 logger.error(e.getMessage(),e);
 			   }
 			   finally{
-				 if (is!=null){
-				   IOUtils.closeQuietly(is);
-				 }
+				 httpget.abort();
 			   }
 			   
 			   
 		   }
 		   else{
-			   IOUtils.closeQuietly(entity.getContent());
+			   httpget.abort();
 		   }
 			
 		   Map<String,String> metaMap = obj.getMeta();
 		   metaMap.put(RESOLVED_URL, resolvedUrl);
 		   metaMap.put(STATUS_CODE, String.valueOf(statusCode));
 		 }
-		 catch(Exception e){
+		 catch(IOException e){
 		   httpget.abort();
+		   throw e;
 		 }
 		 return obj;
 	}

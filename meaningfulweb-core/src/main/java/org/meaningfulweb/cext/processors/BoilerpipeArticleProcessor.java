@@ -36,7 +36,7 @@ public class BoilerpipeArticleProcessor extends HtmlContentProcessor {
 	public boolean processContent(Document document) {
 		try{
 		  XMLOutputter outputter = new XMLOutputter();
-		  String xml = outputter.outputString(document);
+		  String xml = outputter.outputString(document.getRootElement());
 		  BoilerpipeSAXInput saxinput = new BoilerpipeSAXInput(new InputSource(new StringReader(xml)));
 		  TextDocument textDoc = saxinput.getTextDocument();
 		  String text = extractor.getText(textDoc);

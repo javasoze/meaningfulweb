@@ -91,13 +91,15 @@ public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
 				for (Entry<String,Object> entry : entries){
 					String key = entry.getKey();
 					Object valObj = entry.getValue();
-					if (valObj instanceof String){
+					if (valObj!=null){
+					 if (valObj instanceof String){
 					  String val = (String)(valObj);
 					  if (OpenGraphParser.UNESCAPE_HTML_FIELDS.contains(key)){
 						valObj = StringEscapeUtils.unescapeHtml(val);
 					  }
+					 }
+					 currentlyExtracted.put(key, valObj);
 					}
-					currentlyExtracted.put(key, valObj);
 				}   
 			}
 		}
@@ -134,11 +136,12 @@ public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
 				
 				if (entity!=null){
 				  currentlyExtracted.put("image-content-length", String.valueOf(entity.getContentLength()));
-				  httpGet.abort();
 				}
 			}
 			catch(Exception e){
 				logger.error(e.getMessage(),e);
+			}
+			finally{
 				httpGet.abort();
 			}
 		  }
