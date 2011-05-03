@@ -283,10 +283,10 @@ public class MetaContentExtractor {
 		 return obj;
 	}
 	
-	public static void main2(String[] args) throws Exception{
+	public static void main(String[] args) throws Exception{
 		MetaContentExtractor extractor = new MetaContentExtractor();
-		//String url = "http://127.0.0.1/~john/testMW/";
-		String url = "http://www.amazon.co.jp/gp/product/B004O6LVMM?ie=UTF8&ref_=pd_ts_d_3&s=dvd&linkCode=shr&camp=1207&creative=8411&tag=pokopon0e-22";
+		String url = "http://twitpic.com/3sryl9";
+		//String url = "http://www.amazon.co.jp/gp/product/B004O6LVMM?ie=UTF8&ref_=pd_ts_d_3&s=dvd&linkCode=shr&camp=1207&creative=8411&tag=pokopon0e-22";
 		//String url ="http://www.useit.com/papers/anti-mac.html";
 		//String url ="http://sns.mx/WGdXy4";
 		//String url = "http://bit.ly/eL7wGH";
@@ -297,7 +297,7 @@ public class MetaContentExtractor {
 		System.out.println(obj);
 	}
 	
-	public static void main(String[] args) throws Exception{
+	public static void main2(String[] args) throws Exception{
 		String urlFile = new String("/Users/john/github/meaningfulweb/nulls.txt");
 		File f = new File(urlFile);
 		File outFile = new File("/Users/john/github/meaningfulweb/outfile.txt");

@@ -24,6 +24,7 @@ public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
 	private final OpengraphContentProcessor _opengraphProcessor;
 	private final ElementProcessor _elementProcessor;
 	private final BoilerpipeArticleProcessor _boilerpipeProcessor;
+	private final DomainSpecifiedImageProcessor _domainImgProcessor;
 	private final BestImageProcessor _bestimageProcessor;
 	
 	private static final String[] INTERESTED_HEADERS = new String[]{"keywords","description","image"};
@@ -34,6 +35,9 @@ public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
 		_elementProcessor = new ElementProcessor();
 		_elementProcessor.setExtractHtml(false);
 		_boilerpipeProcessor = new BoilerpipeArticleProcessor();
+		_domainImgProcessor = new DomainSpecifiedImageProcessor();
+		_domainImgProcessor.addExtractionHandler("twitpic.com", new TwitpicExtractionHandler());
+		_domainImgProcessor.addExtractionHandler("www.twitpic.com", new TwitpicExtractionHandler());
 		_bestimageProcessor = new BestImageProcessor();
 	}
 	
@@ -43,6 +47,7 @@ public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
 		_opengraphProcessor.setName(name);
 		_elementProcessor.setName(name);
 		_boilerpipeProcessor.setName(name);
+		_domainImgProcessor.setName(name);
 		_bestimageProcessor.setName(name);
 	}
 	
@@ -54,6 +59,7 @@ public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
 		_opengraphProcessor.setMetadata(metadata);
 		_elementProcessor.setMetadata(metadata);
 		_boilerpipeProcessor.setMetadata(metadata);
+		_domainImgProcessor.setMetadata(metadata);
 		_bestimageProcessor.setMetadata(metadata);
 	}
 
@@ -110,7 +116,14 @@ public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
 		    getExtracted().putAll(extracted);   
 		}
 		
+		success = _domainImgProcessor.processContent(document);
+		if (success){
+			Map<String,Object> extracted = _domainImgProcessor.getExtracted();
+		    getExtracted().putAll(extracted); 
+		}
+		
 		if (currentlyExtracted.get("image")==null){
+		  
 		  success = _bestimageProcessor.processContent(document);
 		  if (success){
 			Map<String,Object> extracted = _bestimageProcessor.getExtracted();
