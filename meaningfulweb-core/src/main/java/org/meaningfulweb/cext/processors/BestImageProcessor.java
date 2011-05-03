@@ -92,12 +92,12 @@ public class BestImageProcessor
           onclick = StringUtils.lowerCase(onclickAttr.getValue());
         }
 
-       // if (hasWidth && hasHeight) {
+        if (src!=null) {
           String url = URLUtil.toAbsoluteURL(baseUrl, contextUrl,src);
           ImageMeta imgInfo = new ImageMeta(imgMetas.size(), alt, title, width,
             height,-1L, url, onclick);
           imgMetas.add(imgInfo);
-        //}
+        }
 
       }
 

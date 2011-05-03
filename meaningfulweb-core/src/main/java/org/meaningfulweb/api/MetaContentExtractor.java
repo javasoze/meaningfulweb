@@ -1,6 +1,11 @@
 package org.meaningfulweb.api;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -156,14 +161,29 @@ public class MetaContentExtractor {
 			
 			// We now have a string of text from the the page.
 			ogMeta.put("url", url);
-			ogMeta.put("title",(String)extracted.get("meaningfulweb.title"));
-			ogMeta.put("description", (String)extracted.get("meaningfulweb.description"));
-			ogMeta.put("image", (String)extracted.get("meaningfulweb.image"));
-			ogMeta.put("content", (String)extracted.get("meaningfulweb.text"));
+			Object title = extracted.get("meaningfulweb.title");
+			if (title!=null){
+			  ogMeta.put("title",String.valueOf(title));
+			}
+			Object desc = extracted.get("meaningfulweb.description");
+			if (desc!=null){
+			  ogMeta.put("description", String.valueOf(desc));
+			}
+			Object img = extracted.get("meaningfulweb.image");
+			if (img!=null){
+			  ogMeta.put("image", String.valueOf(img));
+			}
+			Object content = extracted.get("meaningfulweb.text");
+			if (content!=null){
+			  ogMeta.put("content", String.valueOf(content));
+			}
 			
 			Set<Entry<String,Object>> entries = extracted.entrySet();
 			for (Entry<String,Object> entry : entries){
-				ogMeta.put(entry.getKey(), String.valueOf(entry.getValue()));
+				Object val = entry.getValue();
+				if (val!=null){
+				  ogMeta.put(entry.getKey(), String.valueOf(val));
+				}
 			}
 		}
 	  }
@@ -263,10 +283,10 @@ public class MetaContentExtractor {
 		 return obj;
 	}
 	
-	public static void main(String[] args) throws Exception{
+	public static void main2(String[] args) throws Exception{
 		MetaContentExtractor extractor = new MetaContentExtractor();
 		//String url = "http://127.0.0.1/~john/testMW/";
-		String url = "http://www.seobook.com/google-kills-ehows-competitors";
+		String url = "http://www.amazon.co.jp/gp/product/B004O6LVMM?ie=UTF8&ref_=pd_ts_d_3&s=dvd&linkCode=shr&camp=1207&creative=8411&tag=pokopon0e-22";
 		//String url ="http://www.useit.com/papers/anti-mac.html";
 		//String url ="http://sns.mx/WGdXy4";
 		//String url = "http://bit.ly/eL7wGH";
@@ -275,5 +295,44 @@ public class MetaContentExtractor {
         MeaningfulWebObject obj = extractor.extractFromUrl(url);
 		
 		System.out.println(obj);
+	}
+	
+	public static void main(String[] args) throws Exception{
+		String urlFile = new String("/Users/john/github/meaningfulweb/nulls.txt");
+		File f = new File(urlFile);
+		File outFile = new File("/Users/john/github/meaningfulweb/outfile.txt");
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+		BufferedReader reader = new BufferedReader(new FileReader(f));
+		int offset = "skipping url with null title: ".length();
+		MetaContentExtractor extractor = new MetaContentExtractor();
+		int count = 0;
+		while(true){
+			String line = reader.readLine();
+			if (line==null) break;
+			if (count%10 == 0){
+				System.out.println(count+" urls processed.");
+			}
+			count++;
+			try{
+			  line = line.substring(offset);
+			  MeaningfulWebObject obj = extractor.extractFromUrl(line);
+			  String title = obj.getTitle();
+			  if (title==null){
+				  writer.write("no title: "+line+"\n");
+			  }
+			  else if ("null".equals(title)){
+				  writer.write("null title: "+line+"\n");
+			  }
+			  writer.flush();
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			Thread.sleep(200);
+		}
+		
+		reader.close();
+		writer.close();
 	}
 }
