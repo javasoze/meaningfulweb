@@ -107,6 +107,9 @@ public class MetaContentExtractor {
     		  totalBytesRead+=count;
     		  baos.write(contentBytes,0,count);
     	  }
+    	  else if (count<0){
+    		  break;
+    	  }
     	  if (totalBytesRead>=MAX_CONTENT_LEN) break;
       }
 	  
