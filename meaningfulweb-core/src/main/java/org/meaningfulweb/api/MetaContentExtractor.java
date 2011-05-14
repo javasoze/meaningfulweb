@@ -52,6 +52,9 @@ public class MetaContentExtractor {
 	
 	private static final String RESOLVED_URL = "resolved-url";
 	private static final String STATUS_CODE = "status-code";
+	
+	private static final long MAX_CONTENT_LEN = 500000;
+	private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 	private final Detector _detector;
 	private final Parser _autoParser;
 	private final TXTParser _txtParser;
@@ -95,11 +98,21 @@ public class MetaContentExtractor {
 	  Map<String,Object> output = new HashMap<String,Object>();
 	  
 	  ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      byte[] contentBytes;
+      byte[] contentBytes = new byte[DEFAULT_BUFFER_SIZE];
 	    
-	  IOUtils.copy(in, baos);
-	  contentBytes = baos.toByteArray();
+      long totalBytesRead = 0L;
+      while(true){
+    	  int count = in.read(contentBytes);
+    	  if (count>0){
+    		  totalBytesRead+=count;
+    		  baos.write(contentBytes,0,count);
+    	  }
+    	  if (totalBytesRead>=MAX_CONTENT_LEN) break;
+      }
+	  
+	  if (totalBytesRead>=MAX_CONTENT_LEN) throw new IOException("content too large");
 	      
+	  contentBytes = baos.toByteArray();
       Extract extract = new Extract(contentBytes);
       extract.getComponents().addAll(components);
       extract.setConfig(config);
@@ -249,7 +262,8 @@ public class MetaContentExtractor {
 		   int statusCode = response.getStatusLine().getStatusCode();
 		   
 		   HttpEntity entity = response.getEntity();
-		   if (statusCode < 400) {
+		   long contentLen = entity.getContentLength();
+		   if (statusCode < 400 && contentLen < MAX_CONTENT_LEN) {
 			   Metadata metadata = new Metadata();
 			   metadata.add(Metadata.RESOURCE_NAME_KEY, url);
 			   metadata.add(Metadata.CONTENT_TYPE,entity.getContentType().getValue());
@@ -285,7 +299,7 @@ public class MetaContentExtractor {
 	
 	public static void main(String[] args) throws Exception{
 		MetaContentExtractor extractor = new MetaContentExtractor();
-		String url = "http://twitpic.com/3sryl9";
+		String url = "http://kairos.blogviaje.com/1177349700/";
 		//String url = "http://www.amazon.co.jp/gp/product/B004O6LVMM?ie=UTF8&ref_=pd_ts_d_3&s=dvd&linkCode=shr&camp=1207&creative=8411&tag=pokopon0e-22";
 		//String url ="http://www.useit.com/papers/anti-mac.html";
 		//String url ="http://sns.mx/WGdXy4";
