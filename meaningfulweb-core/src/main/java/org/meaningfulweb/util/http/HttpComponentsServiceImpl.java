@@ -138,7 +138,6 @@ public class HttpComponentsServiceImpl
     params.setBooleanParameter(HttpConnectionParams.TCP_NODELAY, tcpNoDelay);
     params.setIntParameter(HttpConnectionParams.SO_TIMEOUT,
       socketTimeoutInSeconds * 1000);
-
     params.setParameter(ConnManagerParams.MAX_CONNECTIONS_PER_ROUTE,
       new ConnPerRouteBean(connectionsPerHost));
     params.setIntParameter(ConnManagerParams.MAX_TOTAL_CONNECTIONS,
@@ -160,6 +159,9 @@ public class HttpComponentsServiceImpl
         if (!request.containsHeader("Accept-Encoding")) {
           request.addHeader("Accept-Encoding", "gzip");
         }
+        if (!request.containsHeader("User-Agent")){
+          request.addHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13");
+        } 
       }
     });
 
@@ -248,6 +250,8 @@ public class HttpComponentsServiceImpl
   }
 
   try {
+
+    
     HttpResponse response = httpClient.execute(httpget);
     StatusLine status = response.getStatusLine();
     int statusCode = status.getStatusCode();
