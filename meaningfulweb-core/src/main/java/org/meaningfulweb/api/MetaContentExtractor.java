@@ -150,10 +150,6 @@ public class MetaContentExtractor {
 	  Map<String,String> ogMeta = obj.getMeta();
 	  MediaType type = _detector.detect(in, meta);
 
-	  String domain =  URLUtil.extractDomainFromUrl(url);
-	  if (domain!=null){
-	    obj.setDomain(domain);
-	  }
 	  ogMeta.put("content-type",type.toString());
 	  if ("image".equals(type.getType())){
 		ogMeta.put("image", url);
@@ -188,6 +184,10 @@ public class MetaContentExtractor {
 			Object img = extracted.get("meaningfulweb.image");
 			if (img!=null){
 			  ogMeta.put("image", String.valueOf(img));
+			}
+			Object fullimg = extracted.get("meaningfulweb.fullimage");
+			if (fullimg!=null){
+			  ogMeta.put("fullimage", String.valueOf(fullimg));
 			}
 			Object content = extracted.get("meaningfulweb.text");
 			if (content!=null){
@@ -268,13 +268,13 @@ public class MetaContentExtractor {
 		   long contentLen = entity.getContentLength();
 		   if (statusCode < 400 && contentLen < MAX_CONTENT_LEN) {
 			   Metadata metadata = new Metadata();
-			   metadata.add(Metadata.RESOURCE_NAME_KEY, url);
+			   metadata.add(Metadata.RESOURCE_NAME_KEY, resolvedUrl);
 			   metadata.add(Metadata.CONTENT_TYPE,entity.getContentType().getValue());
 			   
 			   InputStream is = null;
 			   try{
 				 is = entity.getContent();
-			     obj = extract(url, is, metadata);
+			     obj = extract(resolvedUrl, is, metadata);
 			   }
 			   catch(Exception e){
 				 logger.error(e.getMessage(),e);
@@ -292,6 +292,11 @@ public class MetaContentExtractor {
 		   Map<String,String> metaMap = obj.getMeta();
 		   metaMap.put(RESOLVED_URL, resolvedUrl);
 		   metaMap.put(STATUS_CODE, String.valueOf(statusCode));
+		   
+		   String domain =  URLUtil.extractDomainFromUrl(resolvedUrl);
+		   if (domain!=null){
+			 obj.setDomain(domain);
+		   }
 		 }
 		 catch(IOException e){
 		   httpget.abort();
@@ -302,7 +307,7 @@ public class MetaContentExtractor {
 	
 	public static void main(String[] args) throws Exception{
 		MetaContentExtractor extractor = new MetaContentExtractor();
-		String url = "http://kairos.blogviaje.com/1177349700/";
+		String url = "http://bit.ly/il10nD";
 		//String url = "http://www.amazon.co.jp/gp/product/B004O6LVMM?ie=UTF8&ref_=pd_ts_d_3&s=dvd&linkCode=shr&camp=1207&creative=8411&tag=pokopon0e-22";
 		//String url ="http://www.useit.com/papers/anti-mac.html";
 		//String url ="http://sns.mx/WGdXy4";

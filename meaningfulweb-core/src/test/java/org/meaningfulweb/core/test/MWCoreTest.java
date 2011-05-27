@@ -66,4 +66,13 @@ public class MWCoreTest{
 		MeaningfulWebObject obj = extractor.extractFromUrl(url);
 		TestCase.assertNull(obj.getTitle());
 	}
+	
+	@Test
+	public void testImage() throws Exception{
+		MetaContentExtractor extractor = new MetaContentExtractor();
+		String url = "http://localhost:"+testPort+"/withImage.html";
+		MeaningfulWebObject obj = extractor.extractFromUrl(url);
+		TestCase.assertEquals("http://abc.com/img.gif", obj.getImage());
+		TestCase.assertEquals("http://abc.com/img.gif", obj.getFullImage());
+	}
 }

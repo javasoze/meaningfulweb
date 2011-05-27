@@ -48,7 +48,15 @@ public class MeaningfulWebObject extends OGObject {
 	  return getMeta().get("text");
 	}
 	
-	public String setText(String text){
-	  return getMeta().put("text",text);
+	public void setText(String text){
+	  getMeta().put("text",text);
+	}
+	
+	public String getFullImage(){
+		return getMeta().get("fullimage");
+	}
+	
+	public void setFullImage(String fullimage){
+		getMeta().put("fullimage",fullimage);
 	}
 }

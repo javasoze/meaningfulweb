@@ -158,6 +158,10 @@ public class MeaningfulwebCompositeProcessor extends HtmlContentProcessor {
 				httpGet.abort();
 			}
 		  }
+		  
+		  if (currentlyExtracted.get("fullimage")==null){
+			  currentlyExtracted.put("fullimage", imgUrlObj);
+		  }
 		}
 		
 		return success;

@@ -102,7 +102,7 @@ public class ImageFetcher implements ImageSizeExtractor
 		   
 	   }
 	   catch(Exception e){
-		   logger.error(e.getMessage(),e);
+		   logger.error("cannot fetch: "+path+":"+e.getMessage(),e);
 	   }
 	   finally{
 		   httpget.abort();
