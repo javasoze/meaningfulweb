@@ -52,9 +52,6 @@ Example:
 
 ### Bugs:
 
-File bugs on our jira system at: [http://snaprojects.jira.com/browse/MWEB](http://snaprojects.jira.com/browse/MWEB)
+File bugs [here](https://github.com/javasoze/meaningfulweb/issues?page=1&state=open)
 
-### Wikis:
-
-Wiki Home: [http://snaprojects.jira.com/wiki/display/MWEB/Home](http://snaprojects.jira.com/wiki/display/MWEB/Home)
 
