@@ -68,6 +68,11 @@
       <name>Lei Wang</name>
       <email>wonlay@gmail.com</email>
     </developer>
+    <developer>
+        <id>cwu9T9</id>
+        <name>Calvin Wu</name>
+        <email>calvin.c.wu@gmail.com</email>
+    </developer>
   </developers>
 
   <modules>
